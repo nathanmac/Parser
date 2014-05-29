@@ -100,6 +100,7 @@ Appendix
 --------
 
 ###### Supported Content-Types
+```
 XML
 ---
 application/xml > XML
