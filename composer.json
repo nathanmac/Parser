@@ -1,6 +1,6 @@
 {
     "name": "nathanmac/parser",
-    "description": "Simple PHP Parser Library for API Development",
+    "description": "Simple PHP Parser Utility Library for API Development",
     "keywords": ["parser", "json", "xml", "API"],
     "homepage": "https://github.com/nathanmac/Parser",
     "license": "MIT",
@@ -12,8 +12,8 @@
         "phpunit/phpunit": "4.0.*"
     },
     "autoload": {
-        "psr-0": {
-            "Nathanmac\\Parser": "src/"
+        "psr-4": {
+            "Nathanmac\\ParserUtility\\": "src/"
         }
     },
     "minimum-stability": "stable"

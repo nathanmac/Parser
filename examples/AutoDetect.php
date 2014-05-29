@@ -1,8 +1,7 @@
 <?php
 require "../vendor/autoload.php";
-require "../src/Parser.php";
 
-use Nathanmac\Parser;
+use Nathanmac\ParserUtility\Parser;
 
 $parser = new Parser();
 

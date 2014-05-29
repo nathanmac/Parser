@@ -1,10 +1,8 @@
 <?php
 
 require "../vendor/autoload.php";
-require "../src/Parser.php";
 
-use Nathanmac\Parser;
-
+use Nathanmac\ParserUtility\Parser;
 $parser = new Parser();
 
 echo "<h1>XML Example</h1>";

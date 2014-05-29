@@ -8,10 +8,10 @@ Simple PHP Parser Library for API Development
 Installation
 ------------
 
-Begin by installing this package through Composer. Edit your project's `composer.json` file to require `NathanMac/Parser`.
+Begin by installing this package through Composer. Edit your project's `composer.json` file to require `Nathanmac/Parser`.
 
 	"require": {
-		"NathanMac/Parser": "1.*"
+		"Nathanmac/Parser": "1.*"
 	}
 
 Next, update Composer from the Terminal:
@@ -96,8 +96,10 @@ To test the library itself, run the PHPUnit tests:
     phpunit tests/
 
 
+Appendix
+--------
+
 ###### Supported Content-Types
-```
 XML
 ---
 application/xml > XML

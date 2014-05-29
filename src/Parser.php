@@ -1,4 +1,4 @@
-<?php namespace Nathanmac;
+<?php namespace Nathanmac\ParserUtility;
 
 use Symfony\Component\Yaml\Yaml;
 use Exception;
