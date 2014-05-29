@@ -1,5 +1,5 @@
 {
-    "name": "NathanMac/Parser",
+    "name": "nathanmac/parser",
     "description": "Simple PHP Parser Library for API Development",
     "keywords": ["parser", "json", "xml", "API"],
     "homepage": "https://github.com/nathanmac/Parser",
