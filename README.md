@@ -1,6 +1,8 @@
 Parser
 ======
 
+[![Build Status](https://travis-ci.org/nathanmac/Parser.svg?branch=master)](https://travis-ci.org/nathanmac/Parser)
+
 Simple PHP Parser Library for API Development
 
 Installation
