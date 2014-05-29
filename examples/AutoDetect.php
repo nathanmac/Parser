@@ -2,7 +2,7 @@
 require "../vendor/autoload.php";
 require "../src/Parser.php";
 
-use NathanMac\Parser;
+use Nathanmac\Parser;
 
 $parser = new Parser();
 

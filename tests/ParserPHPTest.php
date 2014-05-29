@@ -3,14 +3,14 @@
 require dirname(__FILE__)."/../vendor/autoload.php";
 require dirname(__FILE__).'/../src/Parser.php';
 
-use NathanMac\Parser;
+use Nathanmac\Parser;
 
 class ParserPHPTest extends PHPUnit_Framework_TestCase {
 
     /** @test */
     public function parse_auto_detect_json_data()
     {
-        $parser = $this->getMock('NathanMac\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Parser', array('_payload'));
 
         $parser->expects($this->any())
             ->method('_payload')
@@ -22,7 +22,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase {
     /** @test */
     public function parse_auto_detect_xml_data()
     {
-        $parser = $this->getMock('NathanMac\Parser', array('_payload', '_format'));
+        $parser = $this->getMock('Nathanmac\Parser', array('_payload', '_format'));
 
         $parser->expects($this->any())
             ->method('_payload')
@@ -37,7 +37,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase {
     /** @test */
     public function parse_auto_detect_xml_data_define_content_type_as_param()
     {
-        $parser = $this->getMock('NathanMac\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Parser', array('_payload'));
 
         $parser->expects($this->any())
             ->method('_payload')
@@ -49,7 +49,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase {
     /** @test */
     public function throw_an_exception_when_parsed_auto_detect_mismatch_content_type()
     {
-        $parser = $this->getMock('NathanMac\Parser', array('_payload', '_format'));
+        $parser = $this->getMock('Nathanmac\Parser', array('_payload', '_format'));
 
         $parser->expects($this->any())
             ->method('_payload')
