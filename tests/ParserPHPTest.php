@@ -140,5 +140,81 @@ message: "hello world"'));
                         sfgsaf:asdfasf');
     }
 
+    /** @test */
+    public function format_detection_defaults_to_json()
+    {
+        $parser = new Parser();
 
+        $_SERVER['HTTP_CONTENT_TYPE'] = "somerandomstuff";
+        $this->assertEquals('json', $parser->_format());
+    }
+
+    /** @test */
+    public function format_detection_json()
+    {
+        $parser = new Parser();
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "application/json";
+        $this->assertEquals('json', $parser->_format());
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "application/x-javascript";
+        $this->assertEquals('json', $parser->_format());
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "text/javascript";
+        $this->assertEquals('json', $parser->_format());
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "text/x-javascript";
+        $this->assertEquals('json', $parser->_format());
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "text/x-json";
+        $this->assertEquals('json', $parser->_format());
+    }
+
+    /** @test */
+    public function format_detection_xml()
+    {
+        $parser = new Parser();
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "application/xml";
+        $this->assertEquals('xml', $parser->_format());
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "text/xml";
+        $this->assertEquals('xml', $parser->_format());
+    }
+
+    /** @test */
+    public function format_detection_yaml()
+    {
+        $parser = new Parser();
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "text/yaml";
+        $this->assertEquals('yaml', $parser->_format());
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "text/x-yaml";
+        $this->assertEquals('yaml', $parser->_format());
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "application/yaml";
+        $this->assertEquals('yaml', $parser->_format());
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "application/x-yaml";
+        $this->assertEquals('yaml', $parser->_format());
+    }
+
+    /** @test */
+    public function format_detection_serialize()
+    {
+        $parser = new Parser();
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "application/vnd.php.serialized";
+        $this->assertEquals('serialize', $parser->_format());
+    }
+
+    /** @test */
+    public function format_detection_query_string()
+    {
+        $parser = new Parser();
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "application/x-www-form-urlencoded";
+        $this->assertEquals('querystr', $parser->_format());
+    }
 }
