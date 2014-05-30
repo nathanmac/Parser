@@ -40,7 +40,7 @@ class Parser
         return $this->{$this->_format()}($this->_payload());
     }
 
-    protected function _format()
+    public function _format()
     {
         if (isset($_SERVER['CONTENT_TYPE']))
         {
