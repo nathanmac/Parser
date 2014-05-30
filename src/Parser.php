@@ -47,6 +47,12 @@ class Parser
             if (isset($this->supported_formats[$_SERVER['CONTENT_TYPE']]))
                 return $this->supported_formats[$_SERVER['CONTENT_TYPE']];
         }
+        if (isset($_SERVER['HTTP_CONTENT_TYPE']))
+        {
+            if (isset($this->supported_formats[$_SERVER['HTTP_CONTENT_TYPE']]))
+                return $this->supported_formats[$_SERVER['HTTP_CONTENT_TYPE']];
+        }
+
         return 'json';
     }
 
