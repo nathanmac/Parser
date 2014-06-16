@@ -3,7 +3,7 @@ Parser
 
 [![Build Status](https://travis-ci.org/nathanmac/Parser.svg?branch=master)](https://travis-ci.org/nathanmac/Parser)
 
-Simple PHP Parser Library for API Development
+Simple PHP Parser Library for API Development, parse a post http payload into a php array.
 
 Installation
 ------------
@@ -17,6 +17,9 @@ Begin by installing this package through Composer. Edit your project's `composer
 Next, update Composer from the Terminal:
 
     composer update
+
+Usage
+-----
 
 #### Parsing Functions
 ```php
