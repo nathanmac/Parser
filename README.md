@@ -37,6 +37,15 @@ Usage
 	$parser->payload('application/json');	// Specifiy the content type
 ```
 
+#### Helper functions
+```php
+    $parser = new Parser();
+    $parser->all();                     // Return all values
+    $parser->get('key', 'default');     // Get value by key, set an optional default.
+    $parser->only('id', 'name');        // Only return value from the selected keys.
+    $parser->except('password');        // Don't return values from the selected keys.
+```
+
 #### Parse JSON
 ```php
 $parser = new Parser();
