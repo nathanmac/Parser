@@ -7,6 +7,59 @@ use Nathanmac\ParserUtility\Parser;
 class ParserPHPTest extends PHPUnit_Framework_TestCase {
 
     /** @test */
+    public function return_value_for_selected_key_use_default_if_not_found()
+    {
+        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+
+        $parser->expects($this->any())
+            ->method('_payload')
+            ->will($this->returnValue('{"status":false, "code":123, "note":"", "message":"hello world"}'));
+
+        $this->assertEquals('ape', $parser->get('banana', 'ape'));
+        $this->assertEquals('123', $parser->get('code', '2345234'));
+        $this->assertEquals('abcdef', $parser->get('note', 'abcdef'));
+    }
+
+    /** @test */
+    public function return_boolean_value_if_payload_has_keys()
+    {
+        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+
+        $parser->expects($this->any())
+            ->method('_payload')
+            ->will($this->returnValue('{"status":false, "code":123, "note":"", "message":"hello world"}'));
+
+        $this->assertTrue($parser->has('status', 'code'));
+        $this->assertFalse($parser->has('banana', 'status'));
+        $this->assertFalse($parser->has('banana'));
+        $this->assertFalse($parser->has('note'));
+    }
+
+    /** @test */
+    public function only_return_selected_fields()
+    {
+        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+
+        $parser->expects($this->any())
+            ->method('_payload')
+            ->will($this->returnValue('{"status":123, "message":"hello world"}'));
+
+        $this->assertEquals(array('status' => 123), $parser->only('status'));
+    }
+
+    /** @test */
+    public function except_do_not_return_selected_fields()
+    {
+        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+
+        $parser->expects($this->any())
+            ->method('_payload')
+            ->will($this->returnValue('{"status":123, "message":"hello world"}'));
+
+        $this->assertEquals(array('status' => 123), $parser->except('message'));
+    }
+
+    /** @test */
     public function parse_auto_detect_json_data()
     {
         $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));

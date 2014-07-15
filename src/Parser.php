@@ -27,6 +27,64 @@ class Parser
 	    'application/x-www-form-urlencoded' => 'querystr'
     );
 
+    public function only($keys)
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        return array_only($this->payload(), $keys) + array_fill_keys($keys, null);
+    }
+
+    public function except($keys)
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        $results = $this->payload();
+
+        foreach ($keys as $key) array_forget($results, $key);
+
+        return $results;
+    }
+
+    public function has($key)
+    {
+        $keys = is_array($key) ? $key : func_get_args();
+
+        $results = $this->payload();
+
+        foreach ($keys as $value)
+        {
+            if (!isset($results[$value]))
+                return false;
+
+            if (is_bool($results[$value]))
+                return true;
+
+            if ($results[$value] === '')
+                return false;
+        }
+        return true;
+    }
+
+    public function get($key = null, $default = null)
+    {
+        $results = $this->payload();
+
+        if ($this->has($key)){
+            return $results[$key];
+        }
+        return $default;
+    }
+
+    /**
+     * Alias to the payload function.
+     *
+     * @return mixed
+     */
+    public function all()
+    {
+        return $this->payload();
+    }
+
     public function payload($format = false)
     {
         if ($format !== false)
@@ -126,3 +184,53 @@ class Parser
 }
 
 class ParserException extends Exception {}
+
+
+/**
+ * Helper Functions
+ *
+ * http://laravel.com/api/4.2/Illuminate/Http/Request.html
+ */
+if ( ! function_exists('array_only'))
+{
+    /**
+     * Get a subset of the items from the given array.
+     *
+     * @param  array  $array
+     * @param  array  $keys
+     * @return array
+     */
+    function array_only($array, $keys)
+    {
+        return array_intersect_key($array, array_flip((array) $keys));
+    }
+}
+
+if ( ! function_exists('array_forget'))
+{
+    /**
+     * Remove an array item from a given array using "dot" notation.
+     *
+     * @param  array   $array
+     * @param  string  $key
+     * @return void
+     */
+    function array_forget(&$array, $key)
+    {
+        $keys = explode('.', $key);
+
+        while (count($keys) > 1)
+        {
+            $key = array_shift($keys);
+
+            if ( ! isset($array[$key]) || ! is_array($array[$key]))
+            {
+                return;
+            }
+
+            $array =& $array[$key];
+        }
+
+        unset($array[array_shift($keys)]);
+    }
+}
