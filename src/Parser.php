@@ -53,13 +53,7 @@ class Parser
 
         foreach ($keys as $value)
         {
-            if (!isset($results[$value]))
-                return false;
-
-            if (is_bool($results[$value]))
-                return true;
-
-            if ($results[$value] === '')
+            if ($this->hasValue($value, $results) === false)
                 return false;
         }
         return true;
@@ -69,10 +63,62 @@ class Parser
     {
         $results = $this->payload();
 
-        if ($this->has($key)){
-            return $results[$key];
+        if ($this->has($key)) {
+            return $this->getValue($key, $results);
         }
         return $default;
+    }
+
+    private function getValue($key, $data)
+    {
+        return $this->_RecursiveGetValue(array_reverse(explode('.', $key)), $data);
+    }
+
+    private function _RecursiveGetValue($route, $data)
+    {
+        $key = array_pop($route);
+
+        if (!isset($data[$key]))
+            return false;
+
+        if (count($route) <= 0)
+        {
+            if (is_bool($data[$key]))
+                return $data[$key];
+
+            if ($data[$key] === '')
+                return false;
+
+            return $data[$key];
+        }
+
+        return $this->_RecursiveGetValue($route, $data[$key]);
+    }
+
+    private function hasValue($key, $data)
+    {
+        return $this->_RecursiveHasValue(array_reverse(explode('.', $key)), $data);
+    }
+
+    private function _RecursiveHasValue($route, $data)
+    {
+        $key = array_pop($route);
+
+        if (!isset($data[$key]))
+            return false;
+
+        if (count($route) <= 0)
+        {
+            if (is_bool($data[$key]))
+                return true;
+
+            if ($data[$key] === '')
+                return false;
+
+            return true;
+        }
+
+        return $this->_RecursiveHasValue($route, $data[$key]);
     }
 
     /**
