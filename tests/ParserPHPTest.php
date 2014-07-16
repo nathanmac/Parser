@@ -7,6 +7,18 @@ use Nathanmac\ParserUtility\Parser;
 class ParserPHPTest extends PHPUnit_Framework_TestCase {
 
     /** @test */
+    public function alias_all_check()
+    {
+        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+
+        $parser->expects($this->any())
+            ->method('_payload')
+            ->will($this->returnValue('{"status":123, "message":"hello world"}'));
+
+        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->all());
+    }
+
+    /** @test */
     public function return_value_for_multi_level_key()
     {
         $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
@@ -139,10 +151,24 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase {
     }
 
     /** @test */
+    public function parser_empty_xml_data()
+    {
+        $parser = new Parser();
+        $this->assertEquals(array(), $parser->xml(""));
+    }
+
+    /** @test */
     public function parser_validates_json_data()
     {
         $parser = new Parser();
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->json('{"status":123, "message":"hello world"}'));
+    }
+
+    /** @test */
+    public function parser_empty_json_data()
+    {
+        $parser = new Parser();
+        $this->assertEquals(array(), $parser->json(""));
     }
 
     /** @test */
@@ -153,10 +179,24 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase {
     }
 
     /** @test */
+    public function parser_empty_serialize_data()
+    {
+        $parser = new Parser();
+        $this->assertEquals(array(), $parser->serialize(""));
+    }
+
+    /** @test */
     public function parser_validates_query_string_data()
     {
         $parser = new Parser();
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->querystr('status=123&message=hello world'));
+    }
+
+    /** @test */
+    public function parser_empty_query_string_data()
+    {
+        $parser = new Parser();
+        $this->assertEquals(array(), $parser->querystr(""));
     }
 
     /** @test */
@@ -166,6 +206,13 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->yaml('---
 status: 123
 message: "hello world"'));
+    }
+
+    /** @test */
+    public function parser_empty_yaml_data()
+    {
+        $parser = new Parser();
+        $this->assertEquals(array(), $parser->yaml(""));
     }
 
     /**
@@ -215,6 +262,9 @@ message: "hello world"'));
         $parser = new Parser();
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "somerandomstuff";
+        $this->assertEquals('json', $parser->_format());
+
+        $_SERVER['CONTENT_TYPE'] = "somerandomstuff";
         $this->assertEquals('json', $parser->_format());
     }
 
