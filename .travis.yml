@@ -15,3 +15,6 @@ addons:
   code_climate:
     repo_token:
       secure: "gwgfVrQ+PtmWdjiyTQnvWSISayW7tABg3ru7cc76x+JlqerUFBlc0rVATgmtfgGRx7BZW6uGuhjCW7yPpOqRGjSWEqzXgo2FNiFBkZZTEJ0hE8/LFWJDGIGRD2qiRpI6r8nOmroDdwI7Y6aIlCw5ooucW5w6TbTygzzcyq4uugc="
+
+after_script:
+  - vendor/bin/test-reporter
