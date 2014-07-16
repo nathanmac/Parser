@@ -13,4 +13,5 @@ before_script:
 
 addons:
   code_climate:
-    repo_token: a408e9ea0ecc693f852b97e7c55cfb920e5d44930afbb391b7becbcedce58f13
+    repo_token:
+      secure: "gwgfVrQ+PtmWdjiyTQnvWSISayW7tABg3ru7cc76x+JlqerUFBlc0rVATgmtfgGRx7BZW6uGuhjCW7yPpOqRGjSWEqzXgo2FNiFBkZZTEJ0hE8/LFWJDGIGRD2qiRpI6r8nOmroDdwI7Y6aIlCw5ooucW5w6TbTygzzcyq4uugc="
