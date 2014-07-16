@@ -1,9 +1,11 @@
 Parser
 ======
 
+[![License](http://img.shields.io/packagist/l/nathanmac/parser.svg)](https://github.com/nathanmac/Parser/blob/master/LICENSE.md)
 [![Build Status](https://travis-ci.org/nathanmac/Parser.svg?branch=master)](https://travis-ci.org/nathanmac/Parser)
-[![Test Coverage](https://codeclimate.com/github/nathanmac/Parser/coverage.png)](https://codeclimate.com/github/nathanmac/Parser)
+[![Coverage Status](https://coveralls.io/repos/nathanmac/Parser/badge.png?branch=master)](https://coveralls.io/r/nathanmac/Parser?branch=master)
 [![Code Climate](https://codeclimate.com/github/nathanmac/Parser.png)](https://codeclimate.com/github/nathanmac/Parser)
+[![Release](http://img.shields.io/github/release/nathanmac/parser.svg)](https://github.com/nathanmac/Parser/releases)
 
 Simple PHP Parser Library for API Development, parse a post http payload into a php array.
 
