@@ -2,6 +2,8 @@ Parser
 ======
 
 [![Build Status](https://travis-ci.org/nathanmac/Parser.svg?branch=master)](https://travis-ci.org/nathanmac/Parser)
+[![Test Coverage](https://codeclimate.com/github/nathanmac/Parser/coverage.png)](https://codeclimate.com/github/nathanmac/Parser)
+[![Code Climate](https://codeclimate.com/github/nathanmac/Parser.png)](https://codeclimate.com/github/nathanmac/Parser)
 
 Simple PHP Parser Library for API Development, parse a post http payload into a php array.
 
