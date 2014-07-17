@@ -31,7 +31,14 @@ class Parser
     {
         $keys = is_array($keys) ? $keys : func_get_args();
 
-        return array_only($this->payload(), $keys) + array_fill_keys($keys, null);
+        $input = $this->payload();
+
+        $results = array();
+        foreach ($keys as $key) {
+            $results = array_merge($results, $this->_buildArray(explode('.', $key), $this->get($key)));
+        }
+
+        return $results;
     }
 
     public function except($keys)
@@ -40,8 +47,9 @@ class Parser
 
         $results = $this->payload();
 
-        foreach ($keys as $key) array_forget($results, $key);
-
+        foreach ($keys as $key) {
+            $this->_removeValue($results, $key);
+        }
         return $results;
     }
 
@@ -53,7 +61,7 @@ class Parser
 
         foreach ($keys as $value)
         {
-            if ($this->hasValue($value, $results) === false)
+            if ($this->_hasValue($value, $results) === false)
                 return false;
         }
         return true;
@@ -64,61 +72,9 @@ class Parser
         $results = $this->payload();
 
         if ($this->has($key)) {
-            return $this->getValue($key, $results);
+            return $this->_getValue($key, $results);
         }
         return $default;
-    }
-
-    private function getValue($key, $data)
-    {
-        return $this->_RecursiveGetValue(array_reverse(explode('.', $key)), $data);
-    }
-
-    private function _RecursiveGetValue($route, $data)
-    {
-        $key = array_pop($route);
-
-        if (!isset($data[$key]))
-            return false;
-
-        if (count($route) <= 0)
-        {
-            if (is_bool($data[$key]))
-                return $data[$key];
-
-            if ($data[$key] === '')
-                return false;
-
-            return $data[$key];
-        }
-
-        return $this->_RecursiveGetValue($route, $data[$key]);
-    }
-
-    private function hasValue($key, $data)
-    {
-        return $this->_RecursiveHasValue(array_reverse(explode('.', $key)), $data);
-    }
-
-    private function _RecursiveHasValue($route, $data)
-    {
-        $key = array_pop($route);
-
-        if (!isset($data[$key]))
-            return false;
-
-        if (count($route) <= 0)
-        {
-            if (is_bool($data[$key]))
-                return true;
-
-            if ($data[$key] === '')
-                return false;
-
-            return true;
-        }
-
-        return $this->_RecursiveHasValue($route, $data[$key]);
     }
 
     /**
@@ -134,13 +90,8 @@ class Parser
     public function payload($format = false)
     {
         if ($format !== false)
-        {
             if (isset($this->supported_formats[$format]))
-            {
                 return $this->{$this->supported_formats[$format]}($this->_payload());
-            }
-            throw new ParserException('Invalid Or Unsupported Format');
-        }
         return $this->{$this->_format()}($this->_payload());
     }
 
@@ -227,41 +178,87 @@ class Parser
         }
         return array();
     }
-}
 
-class ParserException extends Exception {}
-
-
-/**
- * Helper Functions
- *
- * http://laravel.com/api/4.2/Illuminate/Http/Request.html
- */
-if ( ! function_exists('array_only'))
-{
     /**
-     * Get a subset of the items from the given array.
+     * Return a value from the array identified from the key.
      *
-     * @param  array  $array
-     * @param  array  $keys
-     * @return array
+     * @param $key
+     * @param $data
+     * @return mixed
      */
-    function array_only($array, $keys)
+    private function _getValue($key, $data)
     {
-        return array_intersect_key($array, array_flip((array) $keys));
-    }
-}
+        $keys = explode('.', $key);
 
-if ( ! function_exists('array_forget'))
-{
+        while (count($keys) > 1)
+        {
+            $key = array_shift($keys);
+
+            if ( ! isset($data[$key]) || ! is_array($data[$key]))
+            {
+                return false;
+            }
+
+            $data =& $data[$key];
+        }
+
+        return ($data[array_shift($keys)]);
+    }
+
     /**
-     * Remove an array item from a given array using "dot" notation.
+     * Array contains a value identified from the key, returns bool
      *
-     * @param  array   $array
-     * @param  string  $key
-     * @return void
+     * @param $key
+     * @param $data
+     * @return bool
      */
-    function array_forget(&$array, $key)
+    private function _hasValue($key, $data)
+    {
+        $keys = explode('.', $key);
+
+        while (count($keys) > 0)
+        {
+            $key = array_shift($keys);
+
+            if (!isset($data[$key]))
+                return false;
+
+            if (is_bool($data[$key]))
+                return true;
+
+            if ($data[$key] === '')
+                return false;
+
+            $data =& $data[$key];
+        }
+        return true;
+    }
+
+    /**
+     * Build the array structure for value.
+     *
+     * @param $route
+     * @param null $data
+     * @return array|null
+     */
+    private function _buildArray($route, $data = null)
+    {
+        $key = array_pop($route);
+        $data = array($key => $data);
+        if (count($route) == 0)
+        {
+            return $data;
+        }
+        return $this->_buildArray($route, $data);
+    }
+
+    /**
+     * Remove a value identified from the key
+     *
+     * @param $array
+     * @param $key
+     */
+    private function _removeValue(&$array, $key)
     {
         $keys = explode('.', $key);
 
@@ -280,3 +277,5 @@ if ( ! function_exists('array_forget'))
         unset($array[array_shift($keys)]);
     }
 }
+
+class ParserException extends Exception {}
