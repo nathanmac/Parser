@@ -35,6 +35,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(array('id' => 123, 'note' => array('headers' => array('from' => 'example@example.com'), 'body' => 'Hello World')), $parser->except('note.headers.to'));
         $this->assertEquals(array('id' => 123, 'note' => array('headers' => array('to' => 'example@example.com', 'from' => 'example@example.com'))), $parser->except('note.body'));
 
+        $this->assertEquals(array('note' => array('headers' => array('to' => 'example@example.com', 'from' => 'example@example.com'))), $parser->only('note.headers.to', 'note.headers.from'));
         $this->assertEquals(array('id' => 123, 'status' => null, 'note' => array('body' => 'Hello World')), $parser->only('note.body', 'id', 'status'));
     }
 

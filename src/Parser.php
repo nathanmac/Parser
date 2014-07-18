@@ -35,9 +35,10 @@ class Parser
 
         $results = array();
         foreach ($keys as $key) {
-            $results = array_merge($results, $this->_buildArray(explode('.', $key), $this->get($key)));
+            $results = array_merge_recursive($results, $this->_buildArray(explode('.', $key), $this->get($key)));
         }
 
+        var_dump($results);
         return $results;
     }
 
