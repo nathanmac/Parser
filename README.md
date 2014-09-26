@@ -27,27 +27,41 @@ Usage
 
 #### Parsing Functions
 ```php
-	$parser->json($payload);		// JSON > Array
-	$parser->xml($payload);		    // XML > Array
-	$parser->yaml($payload);		// YAML > Array
-	$parser->querystr($payload);	// Query String > Array
-	$parser->serialize($payload);	// Serialized Object > Array
+$parser->json($payload);		// JSON > Array
+$parser->xml($payload);		    // XML > Array
+$parser->yaml($payload);		// YAML > Array
+$parser->querystr($payload);	// Query String > Array
+$parser->serialize($payload);	// Serialized Object > Array
 ```
 
 #### Parse Input/Payload (PUT/POST)
 ```php
-    $parser = new Parser();
-	$parser->payload();		                // Auto Detect Type - 'Content Type' HTTP Header
-	$parser->payload('application/json');	// Specifiy the content type
+$parser = new Parser();
+$parser->payload();		                // Auto Detect Type - 'Content Type' HTTP Header
+$parser->payload('application/json');	// Specifiy the content type
 ```
 
 #### Helper functions
 ```php
-    $parser = new Parser();
-    $parser->all();                     // Return all values
-    $parser->get('key', 'default');     // Get value by key, set an optional default.
-    $parser->only('id', 'name');        // Only return value from the selected keys.
-    $parser->except('password');        // Don't return values from the selected keys.
+$parser = new Parser();
+$parser->all();                         // Return all values
+$parser->get('key', 'default value');   // Get value by key, set an optional default.
+$parser->has('key');                    // Does a key exist, with value.
+$parser->only('id', 'name', 'email');   // Only return value from the selected keys.
+$parser->except('password');            // Don't return values from the selected keys.
+```
+
+#### Wildcards/Special Keys ('*', '%', ':first', ':last', ':index[0]')
+```php
+$parser = new Parser();
+$parser->get('message.*');          // Get value by key. (Wildcard key returns first item found)
+$parser->has('message.*');          // Does a key exist, with value. (Wildcard key returns first item found)
+$parser->get('message.:first');     // Get value by key. (:first key returns first item found)
+$parser->has('message.:first');     // Does a key exist, with value. (:first key returns first item found)
+$parser->get('message.:last');      // Get value by key. (:last key returns first item found)
+$parser->has('message.:last');      // Does a key exist, with value. (:last key returns first item found)
+$parser->get('message.:index[0]');  // Get value by key. (:index[0] key returns item at index 0)
+$parser->has('message.:index[0]');  // Does a key exist, with value. (:index[0] key returns item at index 0)
 ```
 
 #### Parse JSON

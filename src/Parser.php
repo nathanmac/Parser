@@ -5,6 +5,8 @@ use Exception;
 
 class Parser
 {
+    private $wildcards = '/^(\*|%|:first|:last|:(index|item)\[\d+\])$/';
+
     private $supported_formats = array (
       // XML
 	    'application/xml' => 'xml',
@@ -31,8 +33,6 @@ class Parser
     {
         $keys = is_array($keys) ? $keys : func_get_args();
 
-        $input = $this->payload();
-
         $results = array();
         foreach ($keys as $key) {
             $results = array_merge_recursive($results, $this->_buildArray(explode('.', $key), $this->get($key)));
@@ -53,9 +53,9 @@ class Parser
         return $results;
     }
 
-    public function has($key)
+    public function has($keys)
     {
-        $keys = is_array($key) ? $key : func_get_args();
+        $keys = is_array($keys) ? $keys : func_get_args();
 
         $results = $this->payload();
 
@@ -194,15 +194,46 @@ class Parser
         {
             $key = array_shift($keys);
 
-            if ( ! isset($data[$key]) || ! is_array($data[$key]))
-            {
-                return false;
-            }
+            // Wildcard Key
+            if (preg_match($this->wildcards, $key) && is_array($data) && !empty($data)) {
+                // Shift the first item of the array
+                if (preg_match('/^:(index|item)\[\d+\]$/', $key)) {
+                    for ($x = substr($key, 7, -1); $x >= 0; $x--) {
+                        if (empty($data))
+                            return false;
+                        $item = array_shift($data);
+                    }
+                } else if ($key == ':last') {
+                    $item = array_pop($data);
+                } else {
+                    $item = array_shift($data);
+                }
+                $data =& $item;
 
-            $data =& $data[$key];
+            } else {
+                if (!isset($data[$key]) || !is_array($data[$key]))
+                    return false;
+
+                $data =& $data[$key];
+            }
         }
 
-        return ($data[array_shift($keys)]);
+        // Return value
+        $key = array_shift($keys);
+        if (preg_match($this->wildcards, $key)) {
+            if (preg_match('/^:(index|item)\[\d+\]$/', $key)) {
+                for ($x = substr($key, 7, -1); $x >= 0; $x--) {
+                    if (empty($data))
+                        return false;
+                    $item = array_shift($data);
+                }
+                return $item;
+            } else if ($key == ':last') {
+                return array_pop($data);
+            }
+            return array_shift($data); // First Found
+        }
+        return ($data[$key]);
     }
 
     /**
@@ -220,16 +251,34 @@ class Parser
         {
             $key = array_shift($keys);
 
-            if (!isset($data[$key]))
-                return false;
+            // Wildcard Key
+            if (preg_match($this->wildcards, $key) && is_array($data) && !empty($data)) {
+                // Shift the first item of the array
+                if (preg_match('/^:(index|item)\[\d+\]$/', $key)) {
+                    for ($x = substr($key, 7, -1); $x >= 0; $x--) {
+                        if (empty($data))
+                            return false;
+                        $item = array_shift($data);
+                    }
+                } else if ($key == ':last') {
+                    $item = array_pop($data);
+                } else {
+                    $item = array_shift($data);
+                }
+                $data =& $item;
 
-            if (is_bool($data[$key]))
-                return true;
+            } else {
+                if (!isset($data[$key]))
+                    return false;
 
-            if ($data[$key] === '')
-                return false;
+                if (is_bool($data[$key]))
+                    return true;
 
-            $data =& $data[$key];
+                if ($data[$key] === '')
+                    return false;
+
+                $data =& $data[$key];
+            }
         }
         return true;
     }

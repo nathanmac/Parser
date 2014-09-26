@@ -4,7 +4,85 @@ require dirname(__FILE__)."/../vendor/autoload.php";
 
 use Nathanmac\ParserUtility\Parser;
 
-class ParserPHPTest extends PHPUnit_Framework_TestCase {
+class ParserPHPTest extends PHPUnit_Framework_TestCase
+{
+
+    /** @test */
+    public function wildcards_with_simple_structure_json()
+    {
+        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+
+        $parser->expects($this->any())
+            ->method('_payload')
+            ->will($this->returnValue('{"email": {"to": "jane.doe@example.com", "from": "john.doe@example.com", "subject": "Hello World", "message": { "body": "Hello this is a sample message" }}}'));
+
+        $this->assertTrue($parser->has('email.to'));
+        $this->assertTrue($parser->has('email.message.*'));
+        $this->assertTrue($parser->has('email.message.%'));
+        $this->assertTrue($parser->has('email.message.:first'));
+        $this->assertTrue($parser->has('email.message.:last'));
+        $this->assertFalse($parser->has('message.email.*'));
+        $this->assertFalse($parser->has('message.email.%'));
+        $this->assertFalse($parser->has('message.email.:first'));
+        $this->assertFalse($parser->has('message.email.:last'));
+        $this->assertEquals("Hello this is a sample message", $parser->get('email.message.%'));
+        $this->assertEquals("Hello this is a sample message", $parser->get('email.message.:first'));
+        $this->assertEquals("jane.doe@example.com", $parser->get('email.*'));
+        $this->assertEquals("jane.doe@example.com", $parser->get('email.:first'));
+        $this->assertEquals(['body' => 'Hello this is a sample message'], $parser->get('email.:last'));
+        $this->assertEquals("jane.doe@example.com", $parser->get('email.:index[0]'));
+        $this->assertEquals("john.doe@example.com", $parser->get('email.:index[1]'));
+    }
+
+    /** @test */
+    public function wildcards_with_array_structure_json()
+    {
+        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+
+        $parser->expects($this->any())
+            ->method('_payload')
+            ->will($this->returnValue('{"comments": [{ "title": "hello", "message": "hello world"}, {"title": "world", "message": "world hello"}]}'));
+
+        $this->assertTrue($parser->has('comments.*.title'));
+        $this->assertTrue($parser->has('comments.%.title'));
+        $this->assertTrue($parser->has('comments.:index[1].title'));
+        $this->assertTrue($parser->has('comments.:first.title'));
+        $this->assertTrue($parser->has('comments.:last.title'));
+        $this->assertEquals('hello', $parser->get('comments.:index[0].title'));
+        $this->assertEquals('world', $parser->get('comments.:index[1].title'));
+        $this->assertFalse($parser->has('comments.:index[99]'));
+        $this->assertFalse($parser->has('comments.:index[99].title'));
+        $this->assertEquals(['title' => 'hello', 'message' => 'hello world'], $parser->get('comments.*'));
+        $this->assertEquals(['title' => 'hello', 'message' => 'hello world'], $parser->get('comments.%'));
+        $this->assertEquals(['title' => 'hello', 'message' => 'hello world'], $parser->get('comments.:first'));
+        $this->assertEquals(['title' => 'world', 'message' => 'world hello'], $parser->get('comments.:last'));
+        $this->assertEquals(['title' => 'hello', 'message' => 'hello world'], $parser->get('comments.:index[0]'));
+        $this->assertEquals(['title' => 'world', 'message' => 'world hello'], $parser->get('comments.:index[1]'));
+    }
+
+    /** @test */
+    public function array_structured_payload_xml()
+    {
+        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+
+        $parser->expects($this->any())
+            ->method('_payload')
+            ->will($this->returnValue('<xml><comments><title>hello</title><message>hello world</message></comments><comments><title>world</title><message>hello world</message></comments></xml>'));
+
+        $this->assertEquals(array("comments" => array(array("title" => "hello", "message" => "hello world"), array("title" => "world", "message" => "hello world"))), $parser->payload('application/xml'));
+    }
+
+    /** @test */
+    public function array_structured_payload_json()
+    {
+        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+
+        $parser->expects($this->any())
+                    ->method('_payload')
+                    ->will($this->returnValue('{"comments": [{ "title": "hello", "message": "hello world"}, {"title": "world", "message": "hello world"}]}'));
+
+        $this->assertEquals(array("comments" => array(array("title" => "hello", "message" => "hello world"), array("title" => "world", "message" => "hello world"))), $parser->payload());
+    }
 
     /** @test */
     public function alias_all_check()
