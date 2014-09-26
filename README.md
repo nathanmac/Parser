@@ -51,7 +51,7 @@ $parser->only('id', 'name', 'email');   // Only return value from the selected k
 $parser->except('password');            // Don't return values from the selected keys.
 ```
 
-#### Wildcards/Special Keys ('*', '%', ':first', ':last', ':index[0]')
+#### Wildcards/Special Keys (*, %, :first, :last, :index[0], :item[0])
 ```php
 $parser = new Parser();
 $parser->get('message.*');          // Get value by key. (Wildcard key returns first item found)
@@ -62,6 +62,8 @@ $parser->get('message.:last');      // Get value by key. (:last key returns firs
 $parser->has('message.:last');      // Does a key exist, with value. (:last key returns first item found)
 $parser->get('message.:index[0]');  // Get value by key. (:index[0] key returns item at index 0)
 $parser->has('message.:index[0]');  // Does a key exist, with value. (:index[0] key returns item at index 0)
+$parser->get('message.:item[0]');   // Get value by key. (:item[0] key returns item at index 0)
+$parser->has('message.:item[0]');   // Does a key exist, with value. (:item[0] key returns item at index 0)
 ```
 
 #### Parse JSON
