@@ -29,7 +29,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("Hello this is a sample message", $parser->get('email.message.:first'));
         $this->assertEquals("jane.doe@example.com", $parser->get('email.*'));
         $this->assertEquals("jane.doe@example.com", $parser->get('email.:first'));
-        $this->assertEquals(['body' => 'Hello this is a sample message'], $parser->get('email.:last'));
+        $this->assertEquals(array('body' => 'Hello this is a sample message'), $parser->get('email.:last'));
         $this->assertEquals("jane.doe@example.com", $parser->get('email.:index[0]'));
         $this->assertEquals("john.doe@example.com", $parser->get('email.:index[1]'));
     }
@@ -52,12 +52,12 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('world', $parser->get('comments.:index[1].title'));
         $this->assertFalse($parser->has('comments.:index[99]'));
         $this->assertFalse($parser->has('comments.:index[99].title'));
-        $this->assertEquals(['title' => 'hello', 'message' => 'hello world'], $parser->get('comments.*'));
-        $this->assertEquals(['title' => 'hello', 'message' => 'hello world'], $parser->get('comments.%'));
-        $this->assertEquals(['title' => 'hello', 'message' => 'hello world'], $parser->get('comments.:first'));
-        $this->assertEquals(['title' => 'world', 'message' => 'world hello'], $parser->get('comments.:last'));
-        $this->assertEquals(['title' => 'hello', 'message' => 'hello world'], $parser->get('comments.:index[0]'));
-        $this->assertEquals(['title' => 'world', 'message' => 'world hello'], $parser->get('comments.:index[1]'));
+        $this->assertEquals(array('title' => 'hello', 'message' => 'hello world'), $parser->get('comments.*'));
+        $this->assertEquals(array('title' => 'hello', 'message' => 'hello world'), $parser->get('comments.%'));
+        $this->assertEquals(array('title' => 'hello', 'message' => 'hello world'), $parser->get('comments.:first'));
+        $this->assertEquals(array('title' => 'world', 'message' => 'world hello'), $parser->get('comments.:last'));
+        $this->assertEquals(array('title' => 'hello', 'message' => 'hello world'), $parser->get('comments.:index[0]'));
+        $this->assertEquals(array('title' => 'world', 'message' => 'world hello'), $parser->get('comments.:index[1]'));
     }
 
     /** @test */
