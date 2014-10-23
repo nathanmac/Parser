@@ -1,6 +1,8 @@
 <?php namespace Nathanmac\ParserUtility;
 
+use Symfony\Component\Yaml\Yaml;
 use Exception;
+
 
 class Parser
 {
@@ -117,7 +119,16 @@ class Parser
 
 	public function xml($string)
     {
-        return $this->parse($string, new XML());
+        if ($string)
+        {
+            $xml = @simplexml_load_string($string, 'SimpleXMLElement', LIBXML_NOCDATA);
+            if(!$xml)
+            {
+                throw new ParserException('Failed To Parse XML');
+            }
+            return json_decode(json_encode((array) $xml), 1);   // Work around to accept xml input
+        }
+        return array();
     }
 
     public function json($string)
