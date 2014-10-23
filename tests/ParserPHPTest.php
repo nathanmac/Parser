@@ -142,7 +142,6 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue('{"status":false, "code":123, "note":"", "message":"hello world"}'));
 
         $this->assertTrue($parser->has('status', 'code'));
-        //$this->assertFalse($parser->has('banana', 'status'));
         $this->assertFalse($parser->has('banana'));
         $this->assertFalse($parser->has('note'));
     }
