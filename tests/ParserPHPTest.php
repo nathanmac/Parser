@@ -50,6 +50,8 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($parser->has('comments.:last.title'));
         $this->assertEquals('hello', $parser->get('comments.:index[0].title'));
         $this->assertEquals('world', $parser->get('comments.:index[1].title'));
+        $this->assertEquals('world', $parser->get('comments.:last.title'));
+        $this->assertEquals('hello', $parser->get('comments.*.title'));
         $this->assertFalse($parser->has('comments.:index[99]'));
         $this->assertFalse($parser->has('comments.:index[99].title'));
         $this->assertEquals(array('title' => 'hello', 'message' => 'hello world'), $parser->get('comments.*'));
@@ -168,6 +170,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue('{"status":123, "message":"hello world"}'));
 
         $this->assertEquals(array('status' => 123), $parser->except('message'));
+        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->except('message.tags'));
     }
 
     /** @test */
