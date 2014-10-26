@@ -2,7 +2,7 @@
 
 require dirname(__FILE__)."/../vendor/autoload.php";
 
-use Nathanmac\ParserUtility\Parser;
+use Nathanmac\Utilities\Parser;
 
 class ParserPHPTest extends PHPUnit_Framework_TestCase
 {
@@ -10,10 +10,10 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function wildcards_with_simple_structure_json()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue('{"email": {"to": "jane.doe@example.com", "from": "john.doe@example.com", "subject": "Hello World", "message": { "body": "Hello this is a sample message" }}}'));
 
         $this->assertTrue($parser->has('email.to'));
@@ -37,10 +37,10 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function wildcards_with_array_structure_json()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue('{"comments": [{ "title": "hello", "message": "hello world"}, {"title": "world", "message": "world hello"}]}'));
 
         $this->assertTrue($parser->has('comments.*.title'));
@@ -63,24 +63,24 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function array_structured_payload_xml()
+    public function array_structuredgetPayload_xml()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue('<xml><comments><title>hello</title><message>hello world</message></comments><comments><title>world</title><message>hello world</message></comments></xml>'));
 
         $this->assertEquals(array("comments" => array(array("title" => "hello", "message" => "hello world"), array("title" => "world", "message" => "hello world"))), $parser->payload('application/xml'));
     }
 
     /** @test */
-    public function array_structured_payload_json()
+    public function array_structuredgetPayload_json()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
 
         $parser->expects($this->any())
-                    ->method('_payload')
+                    ->method('getPayload')
                     ->will($this->returnValue('{"comments": [{ "title": "hello", "message": "hello world"}, {"title": "world", "message": "hello world"}]}'));
 
         $this->assertEquals(array("comments" => array(array("title" => "hello", "message" => "hello world"), array("title" => "world", "message" => "hello world"))), $parser->payload());
@@ -89,10 +89,10 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function alias_all_check()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue('{"status":123, "message":"hello world"}'));
 
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->all());
@@ -101,10 +101,10 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function return_value_for_multi_level_key()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue('{"id": 123, "note": {"headers": {"to": "example@example.com", "from": "example@example.com"}, "body": "Hello World"}}'));
 
         $this->assertEquals('123', $parser->get('id'));
@@ -122,10 +122,10 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function return_value_for_selected_key_use_default_if_not_found()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue('{"status":false, "code":123, "note":"", "message":"hello world"}'));
 
         $this->assertEquals('ape', $parser->get('banana', 'ape'));
@@ -135,12 +135,12 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function return_boolean_value_if_payload_has_keys()
+    public function return_boolean_value_ifgetPayload_has_keys()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue('{"status":false, "code":123, "note":"", "message":"hello world"}'));
 
         $this->assertTrue($parser->has('status', 'code'));
@@ -151,10 +151,10 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function only_return_selected_fields()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue('{"status":123, "message":"hello world"}'));
 
         $this->assertEquals(array('status' => 123), $parser->only('status'));
@@ -163,10 +163,10 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function except_do_not_return_selected_fields()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue('{"status":123, "message":"hello world"}'));
 
         $this->assertEquals(array('status' => 123), $parser->except('message'));
@@ -176,10 +176,10 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function parse_auto_detect_json_data()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue('{"status":123, "message":"hello world"}'));
 
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload());
@@ -188,14 +188,14 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function parse_auto_detect_xml_data()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload', '_format'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload', 'getFormat'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>"));
 
         $parser->expects($this->any())
-            ->method('_format')
+            ->method('getFormat')
             ->will($this->returnValue('xml'));
 
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload());
@@ -203,10 +203,10 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function parse_auto_detect_xml_data_define_content_type_as_param()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>"));
 
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload('application/xml'));
@@ -215,14 +215,14 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function throw_an_exception_when_parsed_auto_detect_mismatch_content_type()
     {
-        $parser = $this->getMock('Nathanmac\ParserUtility\Parser', array('_payload', '_format'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload', 'getFormat'));
 
         $parser->expects($this->any())
-            ->method('_payload')
+            ->method('getPayload')
             ->will($this->returnValue("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>"));
 
         $parser->expects($this->any())
-            ->method('_format')
+            ->method('getFormat')
             ->will($this->returnValue('serialize'));
 
         $this->setExpectedException('Exception', 'Failed To Parse Serialized Data');
@@ -348,10 +348,10 @@ message: "hello world"'));
         $parser = new Parser();
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "somerandomstuff";
-        $this->assertEquals('json', $parser->_format());
+        $this->assertEquals('json', $parser->getFormat());
 
         $_SERVER['CONTENT_TYPE'] = "somerandomstuff";
-        $this->assertEquals('json', $parser->_format());
+        $this->assertEquals('json', $parser->getFormat());
     }
 
     /** @test */
@@ -360,19 +360,19 @@ message: "hello world"'));
         $parser = new Parser();
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/json";
-        $this->assertEquals('json', $parser->_format());
+        $this->assertEquals('json', $parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/x-javascript";
-        $this->assertEquals('json', $parser->_format());
+        $this->assertEquals('json', $parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "text/javascript";
-        $this->assertEquals('json', $parser->_format());
+        $this->assertEquals('json', $parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "text/x-javascript";
-        $this->assertEquals('json', $parser->_format());
+        $this->assertEquals('json', $parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "text/x-json";
-        $this->assertEquals('json', $parser->_format());
+        $this->assertEquals('json', $parser->getFormat());
     }
 
     /** @test */
@@ -381,10 +381,10 @@ message: "hello world"'));
         $parser = new Parser();
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/xml";
-        $this->assertEquals('xml', $parser->_format());
+        $this->assertEquals('xml', $parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "text/xml";
-        $this->assertEquals('xml', $parser->_format());
+        $this->assertEquals('xml', $parser->getFormat());
     }
 
     /** @test */
@@ -393,16 +393,16 @@ message: "hello world"'));
         $parser = new Parser();
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "text/yaml";
-        $this->assertEquals('yaml', $parser->_format());
+        $this->assertEquals('yaml', $parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "text/x-yaml";
-        $this->assertEquals('yaml', $parser->_format());
+        $this->assertEquals('yaml', $parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/yaml";
-        $this->assertEquals('yaml', $parser->_format());
+        $this->assertEquals('yaml', $parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/x-yaml";
-        $this->assertEquals('yaml', $parser->_format());
+        $this->assertEquals('yaml', $parser->getFormat());
     }
 
     /** @test */
@@ -411,7 +411,7 @@ message: "hello world"'));
         $parser = new Parser();
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/vnd.php.serialized";
-        $this->assertEquals('serialize', $parser->_format());
+        $this->assertEquals('serialize', $parser->getFormat());
     }
 
     /** @test */
@@ -420,6 +420,6 @@ message: "hello world"'));
         $parser = new Parser();
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/x-www-form-urlencoded";
-        $this->assertEquals('querystr', $parser->_format());
+        $this->assertEquals('querystr', $parser->getFormat());
     }
 }

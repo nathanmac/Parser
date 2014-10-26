@@ -1,8 +1,11 @@
-<?php namespace Nathanmac\ParserUtility;
+<?php namespace Nathanmac\Utilities;
 
-use Symfony\Component\Yaml\Yaml;
-use Exception;
-
+use Nathanmac\Utilities\Formats\FormatInterface;
+use Nathanmac\Utilities\Formats\JSON;
+use Nathanmac\Utilities\Formats\QueryStr;
+use Nathanmac\Utilities\Formats\Serialize;
+use Nathanmac\Utilities\Formats\XML;
+use Nathanmac\Utilities\Formats\YAML;
 
 class Parser
 {
@@ -12,8 +15,6 @@ class Parser
       // XML
 	    'application/xml' => 'xml',
 	    'text/xml' => 'xml',
-      // BSON
-        'application/bson' => 'bson',
       // JSON
 	    'application/json' => 'json',
 		'application/x-javascript' => 'json',
@@ -30,13 +31,15 @@ class Parser
 	    'application/x-www-form-urlencoded' => 'querystr'
     );
 
+    /* ------------ Access Methods/Helpers ------------ */
+
     public function only($keys)
     {
         $keys = is_array($keys) ? $keys : func_get_args();
 
         $results = array();
         foreach ($keys as $key) {
-            $results = array_merge_recursive($results, $this->_buildArray(explode('.', $key), $this->get($key)));
+            $results = array_merge_recursive($results, $this->buildArray(explode('.', $key), $this->get($key)));
         }
 
         return $results;
@@ -49,7 +52,7 @@ class Parser
         $results = $this->payload();
 
         foreach ($keys as $key) {
-            $this->_removeValue($results, $key);
+            $this->removeValue($results, $key);
         }
         return $results;
     }
@@ -62,7 +65,7 @@ class Parser
 
         foreach ($keys as $value)
         {
-            if ($this->_hasValue($value, $results) === false)
+            if ($this->hasValueAtKey($value, $results) === false)
                 return false;
         }
         return true;
@@ -70,10 +73,8 @@ class Parser
 
     public function get($key = null, $default = null)
     {
-        $results = $this->payload();
-
         if ($this->has($key)) {
-            return $this->_getValue($key, $results);
+            return $this->getValueAtKey($key, $this->payload());
         }
         return $default;
     }
@@ -92,11 +93,11 @@ class Parser
     {
         if ($format !== false)
             if (isset($this->supported_formats[$format]))
-                return $this->{$this->supported_formats[$format]}($this->_payload());
-        return $this->{$this->_format()}($this->_payload());
+                return $this->{$this->supported_formats[$format]}($this->getPayload());
+        return $this->{$this->getFormat()}($this->getPayload());
     }
 
-    public function _format()
+    public function getFormat()
     {
         if (isset($_SERVER['CONTENT_TYPE']))
         {
@@ -112,73 +113,52 @@ class Parser
         return 'json';
     }
 
-    protected function _payload()
+    protected function getPayload()
     {
         return file_get_contents('php://input');
     }
 
-	public function xml($string)
+    /**
+     * Parse payload string using given formatter.
+     *
+     * @param string $payload
+     * @param FormatInterface $format
+     *
+     * @return array
+     */
+    public function parser($payload, FormatInterface $format)
     {
-        if ($string)
-        {
-            $xml = @simplexml_load_string($string, 'SimpleXMLElement', LIBXML_NOCDATA);
-            if(!$xml)
-            {
-                throw new ParserException('Failed To Parse XML');
-            }
-            return json_decode(json_encode((array) $xml), 1);   // Work around to accept xml input
-        }
-        return array();
+        return $format->parse($payload);
     }
 
-    public function json($string)
+    /* ------------ Helper Methods ------------ */
+
+	public function xml($payload)
     {
-        if ($string)
-        {
-            $json = json_decode(trim($string), true);
-            if (!$json)
-                throw new ParserException('Failed To Parse JSON');
-            return $json;
-        }
-        return array();
+        return $this->parser($payload, new XML());
     }
 
-    public function serialize($string)
+    public function json($payload)
     {
-        if ($string)
-        {
-            $serial = @unserialize(trim($string));
-            if (!$serial)
-                throw new ParserException('Failed To Parse Serialized Data');
-            return $serial;
-        }
-        return array();
+        return $this->parser($payload, new JSON());
     }
 
-    public function querystr($string)
+    public function serialize($payload)
     {
-        if ($string)
-        {
-            @parse_str(trim($string), $querystr);
-            if (!$querystr)
-                throw new ParserException('Failed To Parse Query String');
-            return $querystr;
-        }
-        return array();
+        return $this->parser($payload, new Serialize());
     }
 
-    public function yaml($string)
+    public function querystr($payload)
     {
-        if ($string)
-        {
-            try {
-                return Yaml::parse(trim(preg_replace('/\t+/', '', $string)));
-            } catch (Exception $ex) {
-                throw new ParserException('Failed To Parse YAML');
-            }
-        }
-        return array();
+        return $this->parser($payload, new QueryStr());
     }
+
+    public function yaml($payload)
+    {
+        return $this->parser($payload, new Yaml());
+    }
+
+    /* ------------ Construction Methods ------------ */
 
     /**
      * Return a value from the array identified from the key.
@@ -187,7 +167,7 @@ class Parser
      * @param $data
      * @return mixed
      */
-    private function _getValue($key, $data)
+    private function getValueAtKey($key, $data)
     {
         $keys = explode('.', $key);
 
@@ -244,7 +224,7 @@ class Parser
      * @param $data
      * @return bool
      */
-    private function _hasValue($key, $data)
+    private function hasValueAtKey($key, $data)
     {
         $keys = explode('.', $key);
 
@@ -291,7 +271,7 @@ class Parser
      * @param null $data
      * @return array|null
      */
-    private function _buildArray($route, $data = null)
+    private function buildArray($route, $data = null)
     {
         $key = array_pop($route);
         $data = array($key => $data);
@@ -299,7 +279,7 @@ class Parser
         {
             return $data;
         }
-        return $this->_buildArray($route, $data);
+        return $this->buildArray($route, $data);
     }
 
     /**
@@ -308,7 +288,7 @@ class Parser
      * @param $array
      * @param $key
      */
-    private function _removeValue(&$array, $key)
+    private function removeValue(&$array, $key)
     {
         $keys = explode('.', $key);
 
@@ -327,5 +307,3 @@ class Parser
         unset($array[array_shift($keys)]);
     }
 }
-
-class ParserException extends Exception {}

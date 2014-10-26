@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Nathanmac\\ParserUtility\\": "src/"
+            "Nathanmac\\Utilities\\": "src/"
         }
     },
     "minimum-stability": "stable"
