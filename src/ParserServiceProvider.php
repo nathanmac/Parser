@@ -35,7 +35,7 @@ class ParserServiceProvider extends ServiceProvider {
 
         AliasLoader::getInstance()->alias(
             'Parser',
-            'Nathanmac\ParserUtility\Facades\Parser'
+            'Nathanmac\Utilities\Facades\Parser'
         );
     }
 
