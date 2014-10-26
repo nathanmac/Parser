@@ -7,10 +7,23 @@ use Nathanmac\Utilities\Formats\Serialize;
 use Nathanmac\Utilities\Formats\XML;
 use Nathanmac\Utilities\Formats\YAML;
 
+/**
+ * Parser Library, designed to parse payload data from various formats to php array.
+ *
+ * @package    Nathanmac\Utilities
+ * @author     Nathan Macnamarar <nathan.macnamara@outlook.com>
+ * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
+ */
 class Parser
 {
+    /**
+     * @var string
+     */
     private $wildcards = '/^(\*|%|:first|:last|:(index|item)\[\d+\])$/';
 
+    /**
+     * @var array Supported Formats
+     */
     private $supported_formats = array (
       // XML
 	    'application/xml' => 'xml',
@@ -33,6 +46,13 @@ class Parser
 
     /* ------------ Access Methods/Helpers ------------ */
 
+    /**
+     * Get a subset of the items from the payload data.
+     *
+     * @param  string|array $keys
+     *
+     * @return array
+     */
     public function only($keys)
     {
         $keys = is_array($keys) ? $keys : func_get_args();
@@ -45,6 +65,12 @@ class Parser
         return $results;
     }
 
+    /**
+     * Get all of the input except for a specified array of items.
+     *
+     * @param  string|array  $keys
+     * @return array
+     */
     public function except($keys)
     {
         $keys = is_array($keys) ? $keys : func_get_args();
@@ -57,6 +83,13 @@ class Parser
         return $results;
     }
 
+    /**
+     * Determine if the payload contains a non-empty value for a given key.
+     *
+     * @param  string|array $keys
+     *
+     * @return bool
+     */
     public function has($keys)
     {
         $keys = is_array($keys) ? $keys : func_get_args();
@@ -71,6 +104,14 @@ class Parser
         return true;
     }
 
+    /**
+     * Retrieve an payload item from the payload data, return default item if item not found.
+     *
+     * @param string $key
+     * @param string $default
+     *
+     * @return mixed|null
+     */
     public function get($key = null, $default = null)
     {
         if ($this->has($key)) {
@@ -80,23 +121,36 @@ class Parser
     }
 
     /**
+     * Parse the HTTP payload data, autodetect format and return all data in array.
+     *  Override the format by providing a content type.
+     *
+     * @param string $format
+     *
+     * @return array
+     */
+    public function payload($format = '')
+    {
+        if (!empty($format))
+            if (isset($this->supported_formats[$format]))
+                return $this->{$this->supported_formats[$format]}($this->getPayload());
+        return $this->{$this->getFormat()}($this->getPayload());
+    }
+
+    /**
      * Alias to the payload function.
      *
-     * @return mixed
+     * @return array
      */
     public function all()
     {
         return $this->payload();
     }
 
-    public function payload($format = false)
-    {
-        if ($format !== false)
-            if (isset($this->supported_formats[$format]))
-                return $this->{$this->supported_formats[$format]}($this->getPayload());
-        return $this->{$this->getFormat()}($this->getPayload());
-    }
-
+    /**
+     * Autodetect the payload data type using content-type value.
+     *
+     * @return string Return the short format code (xml, json, ...).
+     */
     public function getFormat()
     {
         if (isset($_SERVER['CONTENT_TYPE']))
@@ -113,6 +167,11 @@ class Parser
         return 'json';
     }
 
+    /**
+     * Return the payload data from the HTTP post request.
+     *
+     * @return string
+     */
     protected function getPayload()
     {
         return file_get_contents('php://input');
@@ -133,26 +192,69 @@ class Parser
 
     /* ------------ Helper Methods ------------ */
 
-	public function xml($payload)
+    /**
+     * XML parser, helper function.
+     *
+     * @param $payload
+     *
+     * @return array
+     *
+     * @throws Exceptions\ParserException
+     */
+    public function xml($payload)
     {
         return $this->parser($payload, new XML());
     }
 
+    /**
+     * JSON parser, helper function.
+     *
+     * @param $payload
+     *
+     * @return array
+     *
+     * @throws Exceptions\ParserException
+     */
     public function json($payload)
     {
         return $this->parser($payload, new JSON());
     }
 
+    /**
+     * Serialized Data parser, helper function.
+     *
+     * @param $payload
+     *
+     * @return array
+     *
+     * @throws Exceptions\ParserException
+     */
     public function serialize($payload)
     {
         return $this->parser($payload, new Serialize());
     }
 
+    /**
+     * Query String parser, helper function.
+     *
+     * @param $payload
+     *
+     * @return array
+     */
     public function querystr($payload)
     {
         return $this->parser($payload, new QueryStr());
     }
 
+    /**
+     * YAML parser, helper function.
+     *
+     * @param $payload
+     *
+     * @return array
+     *
+     * @throws Exceptions\ParserException
+     */
     public function yaml($payload)
     {
         return $this->parser($payload, new Yaml());

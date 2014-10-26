@@ -2,6 +2,13 @@
 
 use Nathanmac\Utilities\Exceptions\ParserException;
 
+/**
+ * JSON Formatter
+ *
+ * @package    Nathanmac\Utilities\Formats
+ * @author     Nathan Macnamarar <nathan.macnamara@outlook.com>
+ * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
+ */
 class JSON implements FormatInterface {
 
     /**

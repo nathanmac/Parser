@@ -1,7 +1,12 @@
 <?php namespace Nathanmac\Utilities\Formats;
 
-use Nathanmac\Utilities\Exceptions\ParserException;
-
+/**
+ * Query String Formatter
+ *
+ * @package    Nathanmac\Utilities\Formats
+ * @author     Nathan Macnamarar <nathan.macnamara@outlook.com>
+ * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
+ */
 class QueryStr implements FormatInterface {
 
     /**
@@ -10,8 +15,6 @@ class QueryStr implements FormatInterface {
      * @param string $payload
      *
      * @return array
-     *
-     * @throws ParserException
      */
     public function parse($payload)
     {

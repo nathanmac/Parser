@@ -2,6 +2,13 @@
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * Parser Facade, supporting Laravel implementations.
+ *
+ * @package    Nathanmac\Utilities\Facades
+ * @author     Nathan Macnamarar <nathan.macnamara@outlook.com>
+ * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
+ */
 class Parser extends Facade {
 
     /**

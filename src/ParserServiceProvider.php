@@ -3,6 +3,13 @@
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * ParserServiceProvider, supporting Laravel implementations.
+ *
+ * @package    Nathanmac\Utilities
+ * @author     Nathan Macnamarar <nathan.macnamara@outlook.com>
+ * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
+ */
 class ParserServiceProvider extends ServiceProvider {
 
     /**
