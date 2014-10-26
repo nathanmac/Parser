@@ -6,6 +6,7 @@ Parser
 [![Coverage Status](https://coveralls.io/repos/nathanmac/Parser/badge.png?branch=master)](https://coveralls.io/r/nathanmac/Parser?branch=master)
 [![Code Climate](https://codeclimate.com/github/nathanmac/Parser.png)](https://codeclimate.com/github/nathanmac/Parser)
 [![Release](http://img.shields.io/github/release/nathanmac/parser.svg)](https://github.com/nathanmac/Parser/releases)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/c5bc4a3d-b954-4901-905f-cd49fb8c3986/mini.png)](https://insight.sensiolabs.com/projects/c5bc4a3d-b954-4901-905f-cd49fb8c3986)
 
 Simple PHP Parser Library for API Development, parse a post http payload into a php array.
 
@@ -15,12 +16,48 @@ Installation
 Begin by installing this package through Composer. Edit your project's `composer.json` file to require `Nathanmac/Parser`.
 
 	"require": {
-		"Nathanmac/Parser": "1.*"
+		"Nathanmac/Parser": "2.*"
 	}
 
 Next, update Composer from the Terminal:
 
     composer update
+
+
+### Laravel Users
+
+If you are a Laravel user, then there is a service provider that you can make use of to automatically prepare the bindings and such.
+
+```php
+
+// app/config/app.php
+
+'providers' => [
+    '...',
+    'Nathanmac\Utilities\ParserServiceProvider'
+];
+```
+
+When this provider is booted, you'll have access to a helpful `Parser` facade, which you may use in your controllers.
+
+```php
+public function index()
+{
+    Parser::payload('application/json');
+    
+    Parser::json($payload);		    // JSON > Array
+    Parser::xml($payload);		    // XML > Array
+    Parser::yaml($payload);		    // YAML > Array
+    Parser::querystr($payload);	    // Query String > Array
+    Parser::serialize($payload);	// Serialized Object > Array
+    
+    Parser::all();                         // Return all values
+    Parser::get('key', 'default value');   // Get value by key, set an optional default.
+    Parser::has('key');                    // Does a key exist, with value.
+    Parser::only('id', 'name', 'email');   // Only return value from the selected keys.
+    Parser::except('password');            // Don't return values from the selected keys.
+}
+```
 
 Usage
 -----
