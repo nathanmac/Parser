@@ -2,7 +2,7 @@
 
 require dirname(__FILE__)."/../vendor/autoload.php";
 
-use Nathanmac\Utilities\Parser;
+use Nathanmac\Utilities\Parser\Parser;
 
 class ParserPHPTest extends PHPUnit_Framework_TestCase
 {
@@ -10,7 +10,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function wildcards_with_simple_structure_json()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
 
         $parser->expects($this->any())
             ->method('getPayload')
@@ -37,7 +37,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function wildcards_with_array_structure_json()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
 
         $parser->expects($this->any())
             ->method('getPayload')
@@ -65,7 +65,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function array_structuredgetPayload_xml()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
 
         $parser->expects($this->any())
             ->method('getPayload')
@@ -77,7 +77,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function array_structuredgetPayload_json()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
 
         $parser->expects($this->any())
                     ->method('getPayload')
@@ -89,7 +89,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function alias_all_check()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
 
         $parser->expects($this->any())
             ->method('getPayload')
@@ -101,7 +101,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function return_value_for_multi_level_key()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
 
         $parser->expects($this->any())
             ->method('getPayload')
@@ -122,7 +122,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function return_value_for_selected_key_use_default_if_not_found()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
 
         $parser->expects($this->any())
             ->method('getPayload')
@@ -137,7 +137,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function return_boolean_value_ifgetPayload_has_keys()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
 
         $parser->expects($this->any())
             ->method('getPayload')
@@ -151,7 +151,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function only_return_selected_fields()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
 
         $parser->expects($this->any())
             ->method('getPayload')
@@ -163,7 +163,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function except_do_not_return_selected_fields()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
 
         $parser->expects($this->any())
             ->method('getPayload')
@@ -176,7 +176,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function parse_auto_detect_json_data()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
 
         $parser->expects($this->any())
             ->method('getPayload')
@@ -188,7 +188,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function parse_auto_detect_xml_data()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload', 'getFormat'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload', 'getFormat'));
 
         $parser->expects($this->any())
             ->method('getPayload')
@@ -203,7 +203,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function parse_auto_detect_xml_data_define_content_type_as_param()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
 
         $parser->expects($this->any())
             ->method('getPayload')
@@ -215,7 +215,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function throw_an_exception_when_parsed_auto_detect_mismatch_content_type()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser', array('getPayload', 'getFormat'));
+        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload', 'getFormat'));
 
         $parser->expects($this->any())
             ->method('getPayload')

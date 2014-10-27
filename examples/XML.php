@@ -2,7 +2,7 @@
 
 require "../vendor/autoload.php";
 
-use Nathanmac\Utilities\Parser;
+use Nathanmac\Utilities\Parser\Parser;
 $parser = new Parser();
 
 echo "<h1>XML Example</h1>";

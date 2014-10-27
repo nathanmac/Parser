@@ -34,7 +34,7 @@ If you are a Laravel user, then there is a service provider that you can make us
 
 'providers' => [
     '...',
-    'Nathanmac\Utilities\ParserServiceProvider'
+    'Nathanmac\Utilities\Parser\ParserServiceProvider'
 ];
 ```
 

@@ -1,11 +1,11 @@
-<?php namespace Nathanmac\Utilities\Formats;
+<?php namespace Nathanmac\Utilities\Parser\Formats;
 
-use Nathanmac\Utilities\Exceptions\ParserException;
+use Nathanmac\Utilities\Parser\Exceptions\ParserException;
 
 /**
  * JSON Formatter
  *
- * @package    Nathanmac\Utilities\Formats
+ * @package    Nathanmac\Utilities\Parser\Formats
  * @author     Nathan Macnamarar <nathan.macnamara@outlook.com>
  * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
  */

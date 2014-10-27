@@ -1,16 +1,16 @@
-<?php namespace Nathanmac\Utilities;
+<?php namespace Nathanmac\Utilities\Parser;
 
-use Nathanmac\Utilities\Formats\FormatInterface;
-use Nathanmac\Utilities\Formats\JSON;
-use Nathanmac\Utilities\Formats\QueryStr;
-use Nathanmac\Utilities\Formats\Serialize;
-use Nathanmac\Utilities\Formats\XML;
-use Nathanmac\Utilities\Formats\YAML;
+use Nathanmac\Utilities\Parser\Formats\FormatInterface;
+use Nathanmac\Utilities\Parser\Formats\JSON;
+use Nathanmac\Utilities\Parser\Formats\QueryStr;
+use Nathanmac\Utilities\Parser\Formats\Serialize;
+use Nathanmac\Utilities\Parser\Formats\XML;
+use Nathanmac\Utilities\Parser\Formats\YAML;
 
 /**
  * Parser Library, designed to parse payload data from various formats to php array.
  *
- * @package    Nathanmac\Utilities
+ * @package    Nathanmac\Utilities\Parser
  * @author     Nathan Macnamarar <nathan.macnamara@outlook.com>
  * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
  */

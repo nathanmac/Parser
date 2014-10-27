@@ -1,11 +1,11 @@
-<?php namespace Nathanmac\Utilities\Facades;
+<?php namespace Nathanmac\Utilities\Parser\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
  * Parser Facade, supporting Laravel implementations.
  *
- * @package    Nathanmac\Utilities\Facades
+ * @package    Nathanmac\Utilities\Parser\Facades
  * @author     Nathan Macnamarar <nathan.macnamara@outlook.com>
  * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
  */

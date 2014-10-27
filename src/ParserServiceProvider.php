@@ -1,4 +1,4 @@
-<?php namespace Nathanmac\Utilities;
+<?php namespace Nathanmac\Utilities\Parser;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 /**
  * ParserServiceProvider, supporting Laravel implementations.
  *
- * @package    Nathanmac\Utilities
+ * @package    Nathanmac\Utilities\Parser
  * @author     Nathan Macnamarar <nathan.macnamara@outlook.com>
  * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
  */
@@ -42,7 +42,7 @@ class ParserServiceProvider extends ServiceProvider {
 
         AliasLoader::getInstance()->alias(
             'Parser',
-            'Nathanmac\Utilities\Facades\Parser'
+            'Nathanmac\Utilities\Parser\Facades\Parser'
         );
     }
 

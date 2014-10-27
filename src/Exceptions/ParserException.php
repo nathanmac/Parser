@@ -1,4 +1,4 @@
-<?php namespace Nathanmac\Utilities\Exceptions;
+<?php namespace Nathanmac\Utilities\Parser\Exceptions;
 
 use Exception;
 
