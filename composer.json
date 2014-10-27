@@ -3,6 +3,12 @@
     "description": "Simple PHP Parser Utility Library for API Development",
     "keywords": ["parser", "json", "xml", "API"],
     "homepage": "https://github.com/nathanmac/Parser",
+    "authors": [
+        {
+            "name": "Nathan Macnamara",
+            "email": "nathan.macnamara@outlook.com"
+        }
+    ],
     "license": "MIT",
     "require": {
         "php": ">=5.2.0",

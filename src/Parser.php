@@ -11,7 +11,7 @@ use Nathanmac\Utilities\Parser\Formats\YAML;
  * Parser Library, designed to parse payload data from various formats to php array.
  *
  * @package    Nathanmac\Utilities\Parser
- * @author     Nathan Macnamarar <nathan.macnamara@outlook.com>
+ * @author     Nathan Macnamara <nathan.macnamara@outlook.com>
  * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
  */
 class Parser
