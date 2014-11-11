@@ -31,7 +31,7 @@ class BSON implements FormatInterface {
             }
             return array();
         } else {
-            throw new ParserException('Failed To Parse BSON - Supporting Library Not Available.');
+            throw new ParserException('Failed To Parse BSON - Supporting Library Not Available');
         }
     }
 

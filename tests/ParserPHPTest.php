@@ -260,7 +260,7 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function parser_validates_bson_data()
     {
-        if (function_exists('bson_encode')) {
+        if (function_exists('bson_decode')) {
             $expected = array('status' => 123, 'message' => 'hello world');
             $payload = bson_encode($expected);
 
@@ -272,8 +272,21 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function parser_empty_bson_data()
     {
-        $parser = new Parser();
-        $this->assertEquals(array(), $parser->bson(""));
+        if (function_exists('bson_decode')) {
+            $parser = new Parser();
+            $this->assertEquals(array(), $parser->bson(""));
+        }
+    }
+
+    /** @test */
+    public function throw_an_exception_when_bson_library_not_loaded()
+    {
+        if (! function_exists('bson_decode')) {
+            $this->setExpectedException('Exception', 'Failed To Parse BSON - Supporting Library Not Available');
+
+            $parser = new Parser();
+            $this->assertEquals(array(), $parser->bson(""));
+        }
     }
 
     /** @test */
