@@ -258,6 +258,25 @@ class ParserPHPTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function parser_validates_bson_data()
+    {
+        if (function_exists('bson_encode')) {
+            $expected = array('status' => 123, 'message' => 'hello world');
+            $payload = bson_encode($expected);
+
+            $parser = new Parser();
+            $this->assertEquals($expected, $parser->bson($payload));
+        }
+    }
+
+    /** @test */
+    public function parser_empty_bson_data()
+    {
+        $parser = new Parser();
+        $this->assertEquals(array(), $parser->bson(""));
+    }
+
+    /** @test */
     public function parser_validates_serialize_data()
     {
         $parser = new Parser();

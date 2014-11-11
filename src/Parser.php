@@ -1,5 +1,6 @@
 <?php namespace Nathanmac\Utilities\Parser;
 
+use Nathanmac\Utilities\Parser\Formats\BSON;
 use Nathanmac\Utilities\Parser\Formats\FormatInterface;
 use Nathanmac\Utilities\Parser\Formats\JSON;
 use Nathanmac\Utilities\Parser\Formats\QueryStr;
@@ -34,6 +35,8 @@ class Parser
 		'text/javascript' => 'json',
 		'text/x-javascript' => 'json',
 		'text/x-json' => 'json',
+      // BSON
+        'application/bson' => 'bson',
       // YAML
 	    'text/yaml' => 'yaml',
 		'text/x-yaml' => 'yaml',
@@ -218,6 +221,20 @@ class Parser
     public function json($payload)
     {
         return $this->parser($payload, new JSON());
+    }
+
+    /**
+     * BSON parser, helper function.
+     *
+     * @param $payload
+     *
+     * @return array
+     *
+     * @throws Exceptions\ParserException
+     */
+    public function bson($payload)
+    {
+        return $this->parser($payload, new BSON());
     }
 
     /**
