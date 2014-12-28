@@ -190,6 +190,10 @@ text/x-yaml > YAML
 application/yaml > YAML
 application/x-yaml > YAML
 
+BSON
+----
+application/bson > BSON
+
 MISC
 ----
 application/vnd.php.serialized > Serialized Object

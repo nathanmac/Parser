@@ -3,23 +3,31 @@
 require dirname(__FILE__)."/../vendor/autoload.php";
 
 use Nathanmac\Utilities\Parser\Parser;
+use \Mockery as m;
 
 class YamlTest extends PHPUnit_Framework_TestCase {
+
+    protected function tearDown()
+    {
+        m::close();
+    }
 
     /** @test */
     public function parse_auto_detect_serialized_data()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload', 'getFormat'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-            ->method('getFormat')
-            ->will($this->returnValue('yaml'));
+        $parser->shouldReceive('getFormat')
+            ->once()
+            ->andReturn('yaml');
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue('---
+        $parser->shouldReceive('getPayload')
+            ->once()
+            ->andReturn('---
 status: 123
-message: "hello world"'));
+message: "hello world"');
 
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload());
     }

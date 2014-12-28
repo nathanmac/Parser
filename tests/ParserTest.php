@@ -3,17 +3,25 @@
 require dirname(__FILE__)."/../vendor/autoload.php";
 
 use Nathanmac\Utilities\Parser\Parser;
+use \Mockery as m;
 
 class ParserTest extends PHPUnit_Framework_TestCase
 {
+
+    protected function tearDown()
+    {
+        m::close();
+    }
+
     /** @test */
     public function wildcards_with_simple_structure_json()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue('{"email": {"to": "jane.doe@example.com", "from": "john.doe@example.com", "subject": "Hello World", "message": { "body": "Hello this is a sample message" }}}'));
+        $parser->shouldReceive('getPayload')
+            ->andReturn('{"email": {"to": "jane.doe@example.com", "from": "john.doe@example.com", "subject": "Hello World", "message": { "body": "Hello this is a sample message" }}}');
 
         $this->assertTrue($parser->has('email.to'));
         $this->assertTrue($parser->has('email.message.*'));
@@ -36,11 +44,12 @@ class ParserTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function wildcards_with_array_structure_json()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue('{"comments": [{ "title": "hello", "message": "hello world"}, {"title": "world", "message": "world hello"}]}'));
+        $parser->shouldReceive('getPayload')
+            ->andReturn('{"comments": [{ "title": "hello", "message": "hello world"}, {"title": "world", "message": "world hello"}]}');
 
         $this->assertTrue($parser->has('comments.*.title'));
         $this->assertTrue($parser->has('comments.%.title'));
@@ -64,11 +73,13 @@ class ParserTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function array_structured_getPayload_json()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-                    ->method('getPayload')
-                    ->will($this->returnValue('{"comments": [{ "title": "hello", "message": "hello world"}, {"title": "world", "message": "hello world"}]}'));
+        $parser->shouldReceive('getPayload')
+            ->once()
+            ->andReturn('{"comments": [{ "title": "hello", "message": "hello world"}, {"title": "world", "message": "hello world"}]}');
 
         $this->assertEquals(array("comments" => array(array("title" => "hello", "message" => "hello world"), array("title" => "world", "message" => "hello world"))), $parser->payload());
     }
@@ -76,11 +87,13 @@ class ParserTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function alias_all_check()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue('{"status":123, "message":"hello world"}'));
+        $parser->shouldReceive('getPayload')
+            ->once()
+            ->andReturn('{"status":123, "message":"hello world"}');
 
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->all());
     }
@@ -88,11 +101,12 @@ class ParserTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function return_value_for_multi_level_key()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue('{"id": 123, "note": {"headers": {"to": "example@example.com", "from": "example@example.com"}, "body": "Hello World"}}'));
+        $parser->shouldReceive('getPayload')
+            ->andReturn('{"id": 123, "note": {"headers": {"to": "example@example.com", "from": "example@example.com"}, "body": "Hello World"}}');
 
         $this->assertEquals('123', $parser->get('id'));
         $this->assertEquals('Hello World', $parser->get('note.body'));
@@ -109,11 +123,12 @@ class ParserTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function return_value_for_selected_key_use_default_if_not_found()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue('{"status":false, "code":123, "note":"", "message":"hello world"}'));
+        $parser->shouldReceive('getPayload')
+            ->andReturn('{"status":false, "code":123, "note":"", "message":"hello world"}');
 
         $this->assertEquals('ape', $parser->get('banana', 'ape'));
         $this->assertEquals('123', $parser->get('code', '2345234'));
@@ -124,11 +139,13 @@ class ParserTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function return_boolean_value_if_getPayload_has_keys()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue('{"status":false, "code":123, "note":"", "message":"hello world"}'));
+        $parser->shouldReceive('getPayload')
+            ->times(3)
+            ->andReturn('{"status":false, "code":123, "note":"", "message":"hello world"}');
 
         $this->assertTrue($parser->has('status', 'code'));
         $this->assertFalse($parser->has('banana'));
@@ -138,11 +155,12 @@ class ParserTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function only_return_selected_fields()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue('{"status":123, "message":"hello world"}'));
+        $parser->shouldReceive('getPayload')
+            ->andReturn('{"status":123, "message":"hello world"}');
 
         $this->assertEquals(array('status' => 123), $parser->only('status'));
     }
@@ -150,11 +168,13 @@ class ParserTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function except_do_not_return_selected_fields()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue('{"status":123, "message":"hello world"}'));
+        $parser->shouldReceive('getPayload')
+            ->twice()
+            ->andReturn('{"status":123, "message":"hello world"}');
 
         $this->assertEquals(array('status' => 123), $parser->except('message'));
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->except('message.tags'));
@@ -170,5 +190,24 @@ class ParserTest extends PHPUnit_Framework_TestCase
 
         $_SERVER['CONTENT_TYPE'] = "somerandomstuff";
         $this->assertEquals('json', $parser->getFormat());
+    }
+
+    /** @test */
+    public function throw_an_exception_when_parsed_auto_detect_mismatch_content_type()
+    {
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
+
+        $parser->shouldReceive('getFormat')
+            ->once()
+            ->andReturn('serialize');
+
+        $parser->shouldReceive('getPayload')
+            ->once()
+            ->andReturn("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>");
+
+        $this->setExpectedException('Exception', 'Failed To Parse Serialized Data');
+        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload());
     }
 }

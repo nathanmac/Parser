@@ -3,21 +3,29 @@
 require dirname(__FILE__)."/../vendor/autoload.php";
 
 use Nathanmac\Utilities\Parser\Parser;
+use \Mockery as m;
 
 class SerializeTest extends PHPUnit_Framework_TestCase {
+
+    protected function tearDown()
+    {
+        m::close();
+    }
 
     /** @test */
     public function parse_auto_detect_serialized_data()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload', 'getFormat'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-            ->method('getFormat')
-            ->will($this->returnValue('serialize'));
+        $parser->shouldReceive('getFormat')
+            ->once()
+            ->andReturn('serialize');
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}'));
+        $parser->shouldReceive('getPayload')
+            ->once()
+            ->andReturn('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}');
 
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload());
     }

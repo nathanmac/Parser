@@ -3,17 +3,25 @@
 require dirname(__FILE__)."/../vendor/autoload.php";
 
 use Nathanmac\Utilities\Parser\Parser;
+use \Mockery as m;
 
 class XMLTest extends PHPUnit_Framework_TestCase {
 
-    /** @test */
-    public function array_structuredgetPayload_xml()
+    protected function tearDown()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
+        m::close();
+    }
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue('<xml><comments><title>hello</title><message>hello world</message></comments><comments><title>world</title><message>hello world</message></comments></xml>'));
+    /** @test */
+    public function array_structured_getPayload_xml()
+    {
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
+
+        $parser->shouldReceive('getPayload')
+            ->once()
+            ->andReturn('<xml><comments><title>hello</title><message>hello world</message></comments><comments><title>world</title><message>hello world</message></comments></xml>');
 
         $this->assertEquals(array("comments" => array(array("title" => "hello", "message" => "hello world"), array("title" => "world", "message" => "hello world"))), $parser->payload('application/xml'));
     }
@@ -21,45 +29,32 @@ class XMLTest extends PHPUnit_Framework_TestCase {
     /** @test */
     public function parse_auto_detect_xml_data()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload', 'getFormat'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>"));
+        $parser->shouldReceive('getFormat')
+            ->once()
+            ->andReturn('xml');
 
-        $parser->expects($this->any())
-            ->method('getFormat')
-            ->will($this->returnValue('xml'));
+        $parser->shouldReceive('getPayload')
+            ->once()
+            ->andReturn("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>");
 
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload());
     }
     /** @test */
     public function parse_auto_detect_xml_data_define_content_type_as_param()
     {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload'));
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
 
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>"));
+        $parser->shouldReceive('getPayload')
+            ->once()
+            ->andReturn("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>");
 
         $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload('application/xml'));
-    }
-
-    /** @test */
-    public function throw_an_exception_when_parsed_auto_detect_mismatch_content_type()
-    {
-        $parser = $this->getMock('Nathanmac\Utilities\Parser\Parser', array('getPayload', 'getFormat'));
-
-        $parser->expects($this->any())
-            ->method('getPayload')
-            ->will($this->returnValue("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>"));
-
-        $parser->expects($this->any())
-            ->method('getFormat')
-            ->will($this->returnValue('serialize'));
-
-        $this->setExpectedException('Exception', 'Failed To Parse Serialized Data');
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload());
     }
 
     /** @test */
