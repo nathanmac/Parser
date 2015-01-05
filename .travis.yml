@@ -6,7 +6,7 @@ php:
   - 5.5
   - 5.6
 
-script: bundle exec rake travis
+script: rake travis
 
 env:
   - secure: "MCHBESONLTXgn3bsxwQZBty7sNgSwU3P7zTv91TGqQa6YhoAZouqbnZG1yKKOirVugZfNTXTX/mEmq2/RaU5ehsD8fcIMrFpETg6pxJN8MYUUb583g/ER7NkIWlf3fr9Wd6JCZn8rFmQmgF8NHe53zxWoMPagDNhoxoam8ITrK8="
