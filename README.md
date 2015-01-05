@@ -157,6 +157,48 @@ $parsed = $parser->yaml('
 				');
 ```
 
+Custom Parsers/Formatters
+-------------------------
+
+You can make your own custom parsers/formatters by implementing [FormatInterface](https://github.com/nathanmac/Parser/blob/master/src/Formats/FormatInterface.php), the below example demostrates the use of a custom parser/formatter.
+
+```php
+use Nathanmac\Utilities\Parser\Formats\FormatInterface;
+
+/**
+ * Custom Formatter
+ */
+ 
+class CustomFormatter implements FormatInterface {
+    /**
+     * Parse Payload Data
+     *
+     * @param string $payload
+     *
+     * @return array
+     *
+     * @throws ParserException
+     */
+    public function parse($payload)
+    {
+        $payload; // Raw payload data
+        
+        $output = // Process raw payload data to array
+        
+        return $output; // return array parsed data
+    }
+}
+```
+
+##### Using the CustomFormatter
+
+```php
+use Acme\Formatters\CustomFormatter;
+
+$parser = new Parser();
+$parsed = $parser->parser('RAW PAYLOAD DATA', new CustomFormatter());
+```
+
 Testing
 -------
 
