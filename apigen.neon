@@ -1,0 +1,8 @@
+source:
+	- src
+	
+destination: ./
+templateTheme: bootstrap
+title: PHP Parser
+baseUrl: http://nathanmac.github.io/Parser
+googleAnalytics: UA-58213797-1
