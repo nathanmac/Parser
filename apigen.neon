@@ -1,6 +1,5 @@
 source:
 	- src
-	
 destination: ./
 templateTheme: bootstrap
 title: PHP Parser
