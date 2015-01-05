@@ -1,6 +1,6 @@
 source:
 	- src
-destination: ./
+destination: ./docs
 templateTheme: bootstrap
 title: PHP Parser
 baseUrl: http://nathanmac.github.io/Parser
