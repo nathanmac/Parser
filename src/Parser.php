@@ -188,7 +188,7 @@ class Parser
      *
      * @return array
      */
-    public function parser($payload, FormatInterface $format)
+    public function parse($payload, FormatInterface $format)
     {
         return $format->parse($payload);
     }
@@ -206,7 +206,7 @@ class Parser
      */
     public function xml($payload)
     {
-        return $this->parser($payload, new XML());
+        return $this->parse($payload, new XML());
     }
 
     /**
@@ -220,7 +220,7 @@ class Parser
      */
     public function json($payload)
     {
-        return $this->parser($payload, new JSON());
+        return $this->parse($payload, new JSON());
     }
 
     /**
@@ -234,7 +234,7 @@ class Parser
      */
     public function bson($payload)
     {
-        return $this->parser($payload, new BSON());
+        return $this->parse($payload, new BSON());
     }
 
     /**
@@ -248,7 +248,7 @@ class Parser
      */
     public function serialize($payload)
     {
-        return $this->parser($payload, new Serialize());
+        return $this->parse($payload, new Serialize());
     }
 
     /**
@@ -260,7 +260,7 @@ class Parser
      */
     public function querystr($payload)
     {
-        return $this->parser($payload, new QueryStr());
+        return $this->parse($payload, new QueryStr());
     }
 
     /**
@@ -274,7 +274,7 @@ class Parser
      */
     public function yaml($payload)
     {
-        return $this->parser($payload, new Yaml());
+        return $this->parse($payload, new Yaml());
     }
 
     /* ------------ Construction Methods ------------ */

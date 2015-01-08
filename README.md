@@ -196,7 +196,7 @@ class CustomFormatter implements FormatInterface {
 use Acme\Formatters\CustomFormatter;
 
 $parser = new Parser();
-$parsed = $parser->parser('RAW PAYLOAD DATA', new CustomFormatter());
+$parsed = $parser->parse('RAW PAYLOAD DATA', new CustomFormatter());
 ```
 
 Testing
