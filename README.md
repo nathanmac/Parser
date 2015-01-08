@@ -157,6 +157,12 @@ $parsed = $parser->yaml('
 				');
 ```
 
+#### Parse BSON
+```php
+$parser = new Parser();
+$parsed = $parser->bson('BSON DATA HERE');
+```
+
 Custom Parsers/Formatters
 -------------------------
 
