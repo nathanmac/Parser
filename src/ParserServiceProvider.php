@@ -1,6 +1,5 @@
 <?php namespace Nathanmac\Utilities\Parser;
 
-use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 
 /**
