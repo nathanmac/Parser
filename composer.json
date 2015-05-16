@@ -12,7 +12,7 @@
     "license": "MIT",
     "require": {
         "php": ">=5.2.0",
-        "illuminate/support": "~4.0",
+        "illuminate/support": "~5.0",
         "symfony/yaml": "2.4.*"
     },
     "require-dev": {
