@@ -32,21 +32,6 @@ class ParserServiceProvider extends ServiceProvider {
     }
 
     /**
-     * Bootstrap the application events.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        $this->package('nathanmac/parser');
-
-        AliasLoader::getInstance()->alias(
-            'Parser',
-            'Nathanmac\Utilities\Parser\Facades\Parser'
-        );
-    }
-
-    /**
      * Get the services provided by the provider.
      *
      * @return array

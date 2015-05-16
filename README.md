@@ -24,21 +24,41 @@ Next, update Composer from the Terminal:
     composer update
 
 
-### Laravel Users
+### Laravel/Lumen Users
+
+#### Laravel Users (Adding the Service Provider)
 
 If you are a Laravel user, then there is a service provider that you can make use of to automatically prepare the bindings and such.
 
+Include the service provider within `app/config/app.php`.
+
 ```php
-
-// app/config/app.php
-
 'providers' => [
     '...',
     'Nathanmac\Utilities\Parser\ParserServiceProvider'
 ];
 ```
 
-When this provider is booted, you'll have access to a helpful `Parser` facade, which you may use in your controllers.
+And, for convenience, add a facade alias to this same file at the bottom:
+
+'aliases' => [
+    '...',
+    'Parser' => 'Nathanmac\Utilities\Parser\Facades\Parser',
+];
+```
+
+#### Lumen Users (Adding the Service Provider)
+
+If you are a Lumen user, then there is a service provider that you can make use of to automatically prepare the binding and such.
+
+```php
+
+// bootstrap/app.php
+
+$app->register('Nathanmac\Utilities\Parser\ParserServiceProvider');
+```
+
+#### Using the Facade
 
 ```php
 public function index()
