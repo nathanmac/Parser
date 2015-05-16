@@ -53,7 +53,6 @@ And, for convenience, add a facade alias to this same file at the bottom:
 If you are a Lumen user, then there is a service provider that you can make use of to automatically prepare the binding and such.
 
 ```php
-
 // bootstrap/app.php
 
 $app->register('Nathanmac\Utilities\Parser\ParserServiceProvider');
