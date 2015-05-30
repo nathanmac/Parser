@@ -32,7 +32,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Nathanmac\\Utilities\\Parser\\Test": "tests/"
+            "Nathanmac\\Utilities\\Parser\\Test\\": "tests/"
         }
     },
     "scripts": {
