@@ -1,13 +1,15 @@
 <?php
 
-require dirname(__FILE__)."/../vendor/autoload.php";
+namespace Nathanmac\Utilities\Parser\Tests;
 
 use Nathanmac\Utilities\Parser\Parser;
 use \Mockery as m;
 
-class ParserTest extends PHPUnit_Framework_TestCase
+class ParserTest extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * Tear down after tests
+     */
     protected function tearDown()
     {
         m::close();

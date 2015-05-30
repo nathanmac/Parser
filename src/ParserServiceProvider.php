@@ -1,4 +1,6 @@
-<?php namespace Nathanmac\Utilities\Parser;
+<?php
+
+namespace Nathanmac\Utilities\Parser;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -9,8 +11,8 @@ use Illuminate\Support\ServiceProvider;
  * @author     Nathan Macnamara <nathan.macnamara@outlook.com>
  * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
  */
-class ParserServiceProvider extends ServiceProvider {
-
+class ParserServiceProvider extends ServiceProvider
+{
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -25,7 +27,7 @@ class ParserServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-        $this->app->bind('Parser', function($app) {
+        $this->app->bind('Parser', function ($app) {
             return new Parser;
         });
     }
@@ -39,5 +41,4 @@ class ParserServiceProvider extends ServiceProvider {
     {
         return array('Parser');
     }
-
 }

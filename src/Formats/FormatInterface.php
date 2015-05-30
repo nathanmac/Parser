@@ -1,4 +1,6 @@
-<?php namespace Nathanmac\Utilities\Parser\Formats;
+<?php
+
+namespace Nathanmac\Utilities\Parser\Formats;
 
 /**
  * Formatter Interface
@@ -7,8 +9,8 @@
  * @author     Nathan Macnamara <nathan.macnamara@outlook.com>
  * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
  */
-interface FormatInterface {
-
+interface FormatInterface
+{
     /**
      * Parse Payload Data
      *
@@ -16,5 +18,4 @@ interface FormatInterface {
      * @return array
      */
     public function parse($payload);
-
 }

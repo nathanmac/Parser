@@ -1,11 +1,12 @@
 Parser
 ======
 
-[![License](http://img.shields.io/packagist/l/nathanmac/parser.svg)](https://github.com/nathanmac/Parser/blob/master/LICENSE.md)
-[![Build Status](https://travis-ci.org/nathanmac/Parser.svg?branch=master)](https://travis-ci.org/nathanmac/Parser)
-[![Coverage Status](https://coveralls.io/repos/nathanmac/Parser/badge.png?branch=master)](https://coveralls.io/r/nathanmac/Parser?branch=master)
-[![Code Climate](https://codeclimate.com/github/nathanmac/Parser.png)](https://codeclimate.com/github/nathanmac/Parser)
-[![Latest Stable Version](https://poser.pugx.org/nathanmac/parser/v/stable.svg)](https://packagist.org/packages/nathanmac/parser)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/nathanmac/Parser.svg?style=flat-square)](https://packagist.org/packages/nathanmac/parser)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://img.shields.io/travis/nathanmac/Parser/master.svg?style=flat-square)](https://travis-ci.org/nathanmac/Parser)
+[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/nathanmac/Parser.svg?style=flat-square)](https://scrutinizer-ci.com/g/nathanmac/Parser/code-structure)
+[![Quality Score](https://img.shields.io/scrutinizer/g/nathanmac/Parser.svg?style=flat-square)](https://scrutinizer-ci.com/g/nathanmac/Parser)
+[![Total Downloads](https://img.shields.io/packagist/dt/nathanmac/Parser.svg?style=flat-square)](https://packagist.org/packages/nathanmac/Parser)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/c5bc4a3d-b954-4901-905f-cd49fb8c3986/mini.png)](https://insight.sensiolabs.com/projects/c5bc4a3d-b954-4901-905f-cd49fb8c3986)
 
 Simple PHP Parser Library for API Development, parse a post http payload into a php array.
@@ -228,10 +229,25 @@ $parsed = $parser->parse('RAW PAYLOAD DATA', new CustomFormatter());
 Testing
 -------
 
-To test the library itself, run the PHPUnit tests:
+To test the library itself, run the tests:
 
-    phpunit tests/
+    composer test
 
+Contributing
+------------
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+Credits
+-------
+
+- [nathanmac](https://github.com/nathanmac)
+- [All Contributors](../../contributors)
+
+License
+-------
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
 Appendix
 --------

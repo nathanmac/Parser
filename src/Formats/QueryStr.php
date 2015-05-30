@@ -1,4 +1,6 @@
-<?php namespace Nathanmac\Utilities\Parser\Formats;
+<?php
+
+namespace Nathanmac\Utilities\Parser\Formats;
 
 /**
  * Query String Formatter
@@ -7,8 +9,8 @@
  * @author     Nathan Macnamara <nathan.macnamara@outlook.com>
  * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
  */
-class QueryStr implements FormatInterface {
-
+class QueryStr implements FormatInterface
+{
     /**
      * Parse Payload Data
      *
@@ -25,5 +27,4 @@ class QueryStr implements FormatInterface {
         }
         return array();
     }
-
 }

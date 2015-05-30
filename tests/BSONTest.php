@@ -1,17 +1,11 @@
 <?php
 
-require dirname(__FILE__) . "/../vendor/autoload.php";
+namespace Nathanmac\Utilities\Parser\Tests;
 
 use Nathanmac\Utilities\Parser\Parser;
-use \Mockery as m;
 
-class BSONTest extends PHPUnit_Framework_TestCase {
-
-    protected function tearDown()
-    {
-        m::close();
-    }
-
+class BSONTest extends \PHPUnit_Framework_TestCase
+{
     /** @test */
     public function parser_validates_bson_data()
     {

@@ -1,12 +1,15 @@
 <?php
 
-require dirname(__FILE__)."/../vendor/autoload.php";
+namespace Nathanmac\Utilities\Parser\Tests;
 
 use Nathanmac\Utilities\Parser\Parser;
 use \Mockery as m;
 
-class XMLTest extends PHPUnit_Framework_TestCase {
-
+class XMLTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * Tear down after tests
+     */
     protected function tearDown()
     {
         m::close();
@@ -91,4 +94,3 @@ class XMLTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('xml', $parser->getFormat());
     }
 }
-

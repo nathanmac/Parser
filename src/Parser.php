@@ -1,4 +1,6 @@
-<?php namespace Nathanmac\Utilities\Parser;
+<?php
+
+namespace Nathanmac\Utilities\Parser;
 
 use Nathanmac\Utilities\Parser\Formats\BSON;
 use Nathanmac\Utilities\Parser\Formats\FormatInterface;

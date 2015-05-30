@@ -1,4 +1,6 @@
-<?php namespace Nathanmac\Utilities\Parser\Formats;
+<?php
+
+namespace Nathanmac\Utilities\Parser\Formats;
 
 use Nathanmac\Utilities\Parser\Exceptions\ParserException;
 
@@ -9,8 +11,8 @@ use Nathanmac\Utilities\Parser\Exceptions\ParserException;
  * @author     Nathan Macnamara <nathan.macnamara@outlook.com>
  * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
  */
-class JSON implements FormatInterface {
-
+class JSON implements FormatInterface
+{
     /**
      * Parse Payload Data
      *
@@ -30,5 +32,4 @@ class JSON implements FormatInterface {
         }
         return array();
     }
-
 }
