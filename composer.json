@@ -12,7 +12,7 @@
     "authors": [
         {
             "name": "Nathan Macnamara",
-            "email": "nathan.macnamara@outlook.com"
+            "email": "hello@nathanmac.com"
         }
     ],
     "require": {
@@ -36,11 +36,11 @@
         }
     },
     "scripts": {
-      "test": "phpunit"
+        "test": "phpunit"
     },
     "extra": {
-      "branch-alias": {
-        "dev-master": "3.1.x-dev"
-      }
+        "branch-alias": {
+            "dev-master": "3.1.x-dev"
+        }
     }
 }
