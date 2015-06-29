@@ -175,6 +175,8 @@ class Parser
     /**
      * Return the payload data from the HTTP post request.
      *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     protected function getPayload()
