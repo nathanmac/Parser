@@ -16,6 +16,20 @@ class XMLTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function null_values_for_empty_values()
+    {
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
+
+        $parser->shouldReceive('getPayload')
+            ->once()
+            ->andReturn('<xml><comments><title></title><message>hello world</message></comments><comments><title>world</title><message></message></comments></xml>');
+
+        $this->assertEquals(array("comments" => array(array("title" => null, "message" => "hello world"), array("title" => "world", "message" => null))), $parser->payload('application/xml'));
+    }
+
+    /** @test */
     public function array_structured_getPayload_xml()
     {
         $parser = m::mock('Nathanmac\Utilities\Parser\Parser')

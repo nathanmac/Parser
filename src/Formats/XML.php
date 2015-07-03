@@ -28,7 +28,12 @@ class XML implements FormatInterface
         {
             try {
                 $xml = simplexml_load_string($payload, 'SimpleXMLElement', LIBXML_NOCDATA);
-                return json_decode(json_encode((array) $xml), 1);   // Work around to accept xml input
+
+                // Fix for empty values in XML
+                $json = json_encode((array) $xml);
+                $json = str_replace(':{}',':null', $json);
+                $json = str_replace(':[]',':null', $json);
+                return json_decode($json, 1);   // Work around to accept xml input
             } catch (\Exception $ex) {
                 throw new ParserException('Failed To Parse XML');
             }
