@@ -90,6 +90,7 @@ $parser->xml($payload);		    // XML > Array
 $parser->yaml($payload);		// YAML > Array
 $parser->querystr($payload);	// Query String > Array
 $parser->serialize($payload);	// Serialized Object > Array
+$parser->bson($payload);     	// BSON > Array
 ```
 
 #### Parse Input/Payload (PUT/POST)
@@ -107,6 +108,58 @@ $parser->get('key', 'default value');   // Get value by key, set an optional def
 $parser->has('key');                    // Does a key exist, with value.
 $parser->only('id', 'name', 'email');   // Only return value from the selected keys.
 $parser->except('password');            // Don't return values from the selected keys.
+```
+
+#### Mask function
+The mask function processes payload data using a configuration mask, thereby returning only a selected subset of the data.
+It works just like the `only` method but with the added benefit of allowing you to specify a mask in the form of an array,
+this means you can generate masks on-the-fly based on system and/or user defined conditions.
+
+##### Demo
+###### Mask
+Defining the mask, masks consist of basic array structure, for this particular example we have some rules for the data
+to be returned they include:
+    - the title of the post
+    - all the body's for all the comments.
+
+```php
+$mask = [
+    'post' => [
+        'title' => '*',
+        'comments' => [
+            'body' => '*'
+        ]
+    ]
+];
+```
+
+###### Sample Payload
+```json
+{
+    "post": {
+        "title": "Hello World",
+        "author": "John Smith",
+        "comments": [
+            {"body": "This is a comment", "date": "2015-02-20"},
+            {"body": "This is another comment", "date": "2015-05-09"}
+        ]
+    }
+}
+```
+
+###### Output
+This is the output generated as a result of applying the mask against the sample payload provided above.
+
+```php
+$output = [
+    'post' => [
+        'title' => 'Hello World',
+        'comments' => [
+            ['body' => 'This is a comment'],
+            ['body' => 'This is another comment']
+        ]
+    ]
+];
 ```
 
 #### Wildcards/Special Keys (*, %, :first, :last, :index[0], :item[0])

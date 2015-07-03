@@ -126,6 +126,37 @@ class Parser
     }
 
     /**
+     * Mask input data with a given mapping.
+     *
+     * @param array $mask
+     *
+     * @return array
+     */
+    public function mask(array $mask)
+    {
+        $keys = array();
+        foreach ($mask as $key => $value) {
+            $keys[] = $key . (is_array($value) ? $this->process_mask($value) : '');
+        }
+
+        return $this->only($keys);
+    }
+
+    /**
+     * Recursive processor for processing user masks.
+     *
+     * @param array $mask
+     *
+     * @return string
+     */
+    private function process_mask($mask)
+    {
+        foreach ($mask as $key => $value) {
+            return '.' . $key . (is_array($value) ? $this->process_item($value) : '');
+        }
+    }
+
+    /**
      * Parse the HTTP payload data, autodetect format and return all data in array.
      *  Override the format by providing a content type.
      *

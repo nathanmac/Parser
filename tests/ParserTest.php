@@ -16,6 +16,21 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function mask_payload()
+    {
+        $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
+            ->shouldDeferMissing()
+            ->shouldAllowMockingProtectedMethods();
+
+        $parser->shouldReceive('getPayload')
+            ->andReturn('{"message": {"title": "Hello World", "body": "Some message content"}, "comments": [{ "title": "hello", "message": "hello world"}, {"title": "world", "message": "hello world"}]}');
+
+        $this->assertEquals(array("message" => array("title" => "Hello World")), $parser->mask(array('message' => array('title' => '*'))));
+        $this->assertEquals(array("comments" => array(array("title" => "hello", "message" => "hello world"), array("title" => "world", "message" => "hello world"))), $parser->mask(array('comments' => '*')));
+        $this->assertEquals(array('posts' => null), $parser->mask(array('posts' => '*')));
+    }
+
+    /** @test */
     public function wildcards_with_simple_structure_json()
     {
         $parser = m::mock('Nathanmac\Utilities\Parser\Parser')
