@@ -23,10 +23,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             ->shouldAllowMockingProtectedMethods();
 
         $parser->shouldReceive('getPayload')
-            ->andReturn('{"message": {"title": "Hello World", "body": "Some message content"}, "comments": [{ "title": "hello", "message": "hello world"}, {"title": "world", "message": "hello world"}]}');
+            ->andReturn('{"message": {"title": "Hello World", "body": "Some message content"}, "comments": [{ "title": "hello", "message": "hello world", "tags": ["one", "two"]}, {"title": "world", "message": "hello world", "tags": ["red", "green"]}]}');
 
         $this->assertEquals(array("message" => array("title" => "Hello World")), $parser->mask(array('message' => array('title' => '*'))));
-        $this->assertEquals(array("comments" => array(array("title" => "hello", "message" => "hello world"), array("title" => "world", "message" => "hello world"))), $parser->mask(array('comments' => '*')));
+        $this->assertEquals(array("comments" => array(array("title" => "hello", "message" => "hello world", "tags" => array("one", "two")), array("title" => "world", "message" => "hello world", "tags" => array("red", "green")))), $parser->mask(array('comments' => '*')));
         $this->assertEquals(array('posts' => null), $parser->mask(array('posts' => '*')));
     }
 

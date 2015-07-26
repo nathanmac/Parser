@@ -152,7 +152,7 @@ class Parser
     private function process_mask($mask)
     {
         foreach ($mask as $key => $value) {
-            return '.' . $key . (is_array($value) ? $this->process_item($value) : '');
+            return '.' . $key . (is_array($value) ? $this->process_mask($value) : '');
         }
     }
 
