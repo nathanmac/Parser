@@ -27,6 +27,11 @@ Next, update Composer from the Terminal:
 
 ### Laravel/Lumen Users
 
+Laravel/Lumen Verison | Supported Library Verison
+----------------------|--------------------------
+Laravel/Lumen 5+ | > 3.*
+Laravel 4  | 2.*
+
 #### Laravel Users (Adding the Service Provider)
 
 If you are a Laravel user, then there is a service provider that you can make use of to automatically prepare the bindings and such.
