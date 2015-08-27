@@ -152,6 +152,12 @@ $mask = [
 }
 ```
 
+###### Applying the Mask
+```php
+    $parser = new Parser();
+    $output = $parser->mask($mask);
+```
+
 ###### Output
 This is the output generated as a result of applying the mask against the sample payload provided above.
 
