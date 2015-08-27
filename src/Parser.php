@@ -166,10 +166,7 @@ class Parser
      */
     public function payload($format = '')
     {
-        if (!empty($format))
-            if (isset($this->supported_formats[$format]))
-                return $this->{$this->supported_formats[$format]}($this->getPayload());
-        return $this->{$this->getFormat()}($this->getPayload());
+        return $this->{$this->getFormat($format)}($this->getPayload());
     }
 
     /**
@@ -187,20 +184,44 @@ class Parser
      *
      * @return string Return the short format code (xml, json, ...).
      */
-    public function getFormat()
+    public function getFormat($format = '')
     {
+        if (! empty($format)) {
+            return $this->processContentType($format);
+        }
+
         if (isset($_SERVER['CONTENT_TYPE']))
         {
-            if (isset($this->supported_formats[$_SERVER['CONTENT_TYPE']]))
-                return $this->supported_formats[$_SERVER['CONTENT_TYPE']];
+            $type = $this->processContentType($_SERVER['CONTENT_TYPE']);
+            if ($type !== false) return $type;
         }
+
         if (isset($_SERVER['HTTP_CONTENT_TYPE']))
         {
-            if (isset($this->supported_formats[$_SERVER['HTTP_CONTENT_TYPE']]))
-                return $this->supported_formats[$_SERVER['HTTP_CONTENT_TYPE']];
+            $type = $this->processContentType($_SERVER['HTTP_CONTENT_TYPE']);
+            if ($type !== false) return $type;
         }
 
         return 'json';
+    }
+
+    /**
+     * Process the content-type values
+     *
+     * @param string $contentType Content-Type raw string
+     *
+     * @return bool|string
+     */
+    private function processContentType($contentType)
+    {
+        foreach (explode(';', $contentType) as $type) {
+            $type = strtolower(trim($type));
+            if (isset($this->supported_formats[$type])) {
+                return $this->supported_formats[$type];
+            }
+        }
+
+        return false;
     }
 
     /**

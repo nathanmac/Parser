@@ -104,6 +104,15 @@ class XMLTest extends \PHPUnit_Framework_TestCase
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/xml";
         $this->assertEquals('xml', $parser->getFormat());
 
+        $_SERVER['HTTP_CONTENT_TYPE'] = "application/xml; charset=utf8";
+        $this->assertEquals('xml', $parser->getFormat());
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "charset=utf8; application/xml";
+        $this->assertEquals('xml', $parser->getFormat());
+
+        $_SERVER['HTTP_CONTENT_TYPE'] = "APPLICATION/XML";
+        $this->assertEquals('xml', $parser->getFormat());
+
         $_SERVER['HTTP_CONTENT_TYPE'] = "text/xml";
         $this->assertEquals('xml', $parser->getFormat());
     }
