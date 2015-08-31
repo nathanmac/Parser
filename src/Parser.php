@@ -136,7 +136,7 @@ class Parser
     {
         $keys = array();
         foreach ($mask as $key => $value) {
-            $keys[] = $key . (is_array($value) ? $this->process_mask($value) : '');
+            $keys[] = $key . (is_array($value) ? $this->processMask($value) : '');
         }
 
         return $this->only($keys);
@@ -149,10 +149,10 @@ class Parser
      *
      * @return string
      */
-    private function process_mask($mask)
+    private function processMask($mask)
     {
         foreach ($mask as $key => $value) {
-            return '.' . $key . (is_array($value) ? $this->process_mask($value) : '');
+            return '.' . $key . (is_array($value) ? $this->processMask($value) : '');
         }
     }
 
