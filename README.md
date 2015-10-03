@@ -70,13 +70,15 @@ $app->register('Nathanmac\Utilities\Parser\ParserServiceProvider');
 public function index()
 {
     Parser::payload('application/json');
-    
+
     Parser::json($payload);		    // JSON > Array
     Parser::xml($payload);		    // XML > Array
     Parser::yaml($payload);		    // YAML > Array
     Parser::querystr($payload);	    // Query String > Array
     Parser::serialize($payload);	// Serialized Object > Array
-    
+	Parser::bson($payload);	        // BSON > Array
+	Parser::msgpack($payload);	    // MSGPack > Array
+
     Parser::all();                         // Return all values
     Parser::get('key', 'default value');   // Get value by key, set an optional default.
     Parser::has('key');                    // Does a key exist, with value.
@@ -96,6 +98,7 @@ $parser->yaml($payload);		// YAML > Array
 $parser->querystr($payload);	// Query String > Array
 $parser->serialize($payload);	// Serialized Object > Array
 $parser->bson($payload);     	// BSON > Array
+$parser->msgpack($payload);   	// MSGPack > Array
 ```
 
 #### Parse Input/Payload (PUT/POST)
@@ -248,6 +251,12 @@ $parser = new Parser();
 $parsed = $parser->bson('BSON DATA HERE');
 ```
 
+#### Parse MSGPack
+```php
+$parser = new Parser();
+$parsed = $parser->msgpack('MSGPACK DATA HERE');
+```
+
 Custom Parsers/Formatters
 -------------------------
 
@@ -259,7 +268,7 @@ use Nathanmac\Utilities\Parser\Formats\FormatInterface;
 /**
  * Custom Formatter
  */
- 
+
 class CustomFormatter implements FormatInterface {
     /**
      * Parse Payload Data
@@ -273,9 +282,9 @@ class CustomFormatter implements FormatInterface {
     public function parse($payload)
     {
         $payload; // Raw payload data
-        
+
         $output = // Process raw payload data to array
-        
+
         return $output; // return array parsed data
     }
 }
@@ -341,6 +350,11 @@ application/x-yaml > YAML
 BSON
 ----
 application/bson > BSON
+
+MSGPack
+-------
+application/msgpack > MSGPack
+application/x-msgpack > MSGPack
 
 MISC
 ----

@@ -9,6 +9,7 @@ use Nathanmac\Utilities\Parser\Formats\QueryStr;
 use Nathanmac\Utilities\Parser\Formats\Serialize;
 use Nathanmac\Utilities\Parser\Formats\XML;
 use Nathanmac\Utilities\Parser\Formats\YAML;
+use Nathanmac\Utilities\Parser\Formats\MSGPack;
 
 /**
  * Parser Library, designed to parse payload data from various formats to php array.
@@ -44,6 +45,9 @@ class Parser
 		'text/x-yaml' => 'yaml',
 		'application/yaml' => 'yaml',
 		'application/x-yaml' => 'yaml',
+      // MSGPACK
+        'application/msgpack' => 'msgpack',
+        'application/x-msgpack' => 'msgpack',
       // MISC
 		'application/vnd.php.serialized' => 'serialize',
 	    'application/x-www-form-urlencoded' => 'querystr'
@@ -331,6 +335,20 @@ class Parser
     public function yaml($payload)
     {
         return $this->parse($payload, new Yaml());
+    }
+
+    /**
+     * MSGPack parser, helper function.
+     *
+     * @param $payload
+     *
+     * @return array
+     *
+     * @throws Exceptions\ParserException
+     */
+    public function msgpack($payload)
+    {
+        return $this->parse($payload, new MSGPack());
     }
 
     /* ------------ Construction Methods ------------ */
