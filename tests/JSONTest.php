@@ -75,5 +75,7 @@ class JSONTest extends \PHPUnit_Framework_TestCase
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "text/x-json";
         $this->assertEquals('json', $parser->getFormat());
+
+        unset($_SERVER['HTTP_CONTENT_TYPE']);
     }
 }

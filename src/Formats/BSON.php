@@ -27,13 +27,13 @@ class BSON implements FormatInterface
         if (function_exists('bson_decode')) {
             if ($payload) {
                 $bson = bson_decode(trim($payload));
-                if (!$bson)
+                if (! $bson)
                     throw new ParserException('Failed To Parse BSON');
                 return $bson;
             }
             return array();
-        } else {
-            throw new ParserException('Failed To Parse BSON - Supporting Library Not Available');
         }
+
+        throw new ParserException('Failed To Parse BSON - Supporting Library Not Available');
     }
 }

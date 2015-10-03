@@ -61,5 +61,7 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
         $parser = new Parser();
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/vnd.php.serialized";
         $this->assertEquals('serialize', $parser->getFormat());
+        
+        unset($_SERVER['HTTP_CONTENT_TYPE']);
     }
 }

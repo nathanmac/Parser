@@ -76,5 +76,7 @@ message: "hello world"'));
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/x-yaml";
         $this->assertEquals('yaml', $parser->getFormat());
+
+        unset($_SERVER['HTTP_CONTENT_TYPE']);
     }
 }
