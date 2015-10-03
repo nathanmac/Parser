@@ -53,5 +53,7 @@ class QueryStrTest extends \PHPUnit_Framework_TestCase
         $parser = new Parser();
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/x-www-form-urlencoded";
         $this->assertEquals('querystr', $parser->getFormat());
+
+        unset($_SERVER['HTTP_CONTENT_TYPE']);
     }
 }

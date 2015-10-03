@@ -24,14 +24,14 @@ class Serialize implements FormatInterface
      */
     public function parse($payload)
     {
-        if ($payload)
-        {
+        if ($payload) {
             try {
                 return unserialize(trim($payload));
             } catch (\Exception $ex) {
                 throw new ParserException('Failed To Parse Serialized Data');
             }
         }
+
         return array();
     }
 }

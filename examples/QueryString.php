@@ -12,4 +12,3 @@ $parsed = $parser->querystr('to=Jack Smith&from=Jane Doe&subject=Hello World&bod
 echo "<pre>";
 print_r($parsed);
 echo "</pre>";
-

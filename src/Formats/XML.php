@@ -24,8 +24,7 @@ class XML implements FormatInterface
      */
     public function parse($payload)
     {
-        if ($payload)
-        {
+        if ($payload) {
             try {
                 $xml = simplexml_load_string($payload, 'SimpleXMLElement', LIBXML_NOCDATA);
 
@@ -38,6 +37,7 @@ class XML implements FormatInterface
                 throw new ParserException('Failed To Parse XML');
             }
         }
+        
         return array();
     }
 }

@@ -20,11 +20,11 @@ class QueryStr implements FormatInterface
      */
     public function parse($payload)
     {
-        if ($payload)
-        {
+        if ($payload) {
             parse_str(trim($payload), $querystr);
             return $querystr;
         }
+        
         return array();
     }
 }

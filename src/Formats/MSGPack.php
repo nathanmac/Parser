@@ -5,13 +5,13 @@ namespace Nathanmac\Utilities\Parser\Formats;
 use Nathanmac\Utilities\Parser\Exceptions\ParserException;
 
 /**
- * BSON Formatter
+ * MSGPack Formatter
  *
  * @package    Nathanmac\Utilities\Parser\Formats
- * @author     Nathan Macnamara <nathan.macnamara@outlook.com>
+ * @author     Nathan Macnamara <hola@nathanmac.com>
  * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
  */
-class BSON implements FormatInterface
+class MSGPack implements FormatInterface
 {
     /**
      * Parse Payload Data
@@ -24,16 +24,16 @@ class BSON implements FormatInterface
      */
     public function parse($payload)
     {
-        if (function_exists('bson_decode')) {
+        if (function_exists('msgpack_unpack')) {
             if ($payload) {
-                $bson = bson_decode(trim($payload));
-                if (! $bson)
-                    throw new ParserException('Failed To Parse BSON');
-                return $bson;
+                $msg = msgpack_unpack(trim($payload));
+                if (! $msg)
+                    throw new ParserException('Failed To Parse MSGPack');
+                return $msg;
             }
             return array();
         }
 
-        throw new ParserException('Failed To Parse BSON - Supporting Library Not Available');
+        throw new ParserException('Failed To Parse MSGPack - Supporting Library Not Available');
     }
 }

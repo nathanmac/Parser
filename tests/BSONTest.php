@@ -54,5 +54,7 @@ class BSONTest extends \PHPUnit_Framework_TestCase
         $parser = new Parser();
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/bson";
         $this->assertEquals('bson', $parser->getFormat());
+
+        unset($_SERVER['HTTP_CONTENT_TYPE']);
     }
 }
