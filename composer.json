@@ -12,15 +12,15 @@
     "authors": [
         {
             "name": "Nathan Macnamara",
-            "email": "hello@nathanmac.com"
+            "email": "hola@nathanmac.com"
         }
     ],
     "require": {
         "php": ">=5.3.0",
-        "illuminate/support": "~5.0",
-        "symfony/yaml": "~2.0"
+        "symfony/yaml": "~3.0"
     },
     "require-dev": {
+        "illuminate/support": "~5.0",
         "phpunit/phpunit": "4.*",
         "mockery/mockery": "0.9.3",
         "scrutinizer/ocular": "^1.1"
