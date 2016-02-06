@@ -64,6 +64,14 @@ If you are a Lumen user, then there is a service provider that you can make use 
 $app->register('Nathanmac\Utilities\Parser\ParserServiceProvider');
 ```
 
+Lumen users can also add the facade alias.
+
+```php
+// bootstrap/app.php
+
+class_alias('Nathanmac\Utilities\Parser\Facades\Parser', 'Parser');
+```
+
 #### Using the Facade
 
 ```php
