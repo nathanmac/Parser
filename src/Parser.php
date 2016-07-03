@@ -5,11 +5,11 @@ namespace Nathanmac\Utilities\Parser;
 use Nathanmac\Utilities\Parser\Formats\BSON;
 use Nathanmac\Utilities\Parser\Formats\FormatInterface;
 use Nathanmac\Utilities\Parser\Formats\JSON;
+use Nathanmac\Utilities\Parser\Formats\MSGPack;
 use Nathanmac\Utilities\Parser\Formats\QueryStr;
 use Nathanmac\Utilities\Parser\Formats\Serialize;
 use Nathanmac\Utilities\Parser\Formats\XML;
 use Nathanmac\Utilities\Parser\Formats\YAML;
-use Nathanmac\Utilities\Parser\Formats\MSGPack;
 
 /**
  * Parser Library, designed to parse payload data from various formats to php array.
@@ -28,30 +28,37 @@ class Parser
     /**
      * @var array Supported Formats
      */
-    private $supported_formats = array (
+    private $supported_formats = [
       // XML
-	    'application/xml' => 'xml',
-	    'text/xml' => 'xml',
+        'application/xml' => 'Nathanmac\Utilities\Parser\Formats\XML',
+        'text/xml'        => 'Nathanmac\Utilities\Parser\Formats\XML',
+        'xml'             => 'Nathanmac\Utilities\Parser\Formats\XML',
       // JSON
-	    'application/json' => 'json',
-		'application/x-javascript' => 'json',
-		'text/javascript' => 'json',
-		'text/x-javascript' => 'json',
-		'text/x-json' => 'json',
+        'application/json'         => 'Nathanmac\Utilities\Parser\Formats\JSON',
+        'application/x-javascript' => 'Nathanmac\Utilities\Parser\Formats\JSON',
+        'text/javascript'          => 'Nathanmac\Utilities\Parser\Formats\JSON',
+        'text/x-javascript'        => 'Nathanmac\Utilities\Parser\Formats\JSON',
+        'text/x-json'              => 'Nathanmac\Utilities\Parser\Formats\JSON',
+        'json'                     => 'Nathanmac\Utilities\Parser\Formats\JSON',
       // BSON
-        'application/bson' => 'bson',
+        'application/bson' => 'Nathanmac\Utilities\Parser\Formats\BSON',
+        'bson'             => 'Nathanmac\Utilities\Parser\Formats\BSON',
       // YAML
-	    'text/yaml' => 'yaml',
-		'text/x-yaml' => 'yaml',
-		'application/yaml' => 'yaml',
-		'application/x-yaml' => 'yaml',
+        'text/yaml'          => 'Nathanmac\Utilities\Parser\Formats\YAML',
+        'text/x-yaml'        => 'Nathanmac\Utilities\Parser\Formats\YAML',
+        'application/yaml'   => 'Nathanmac\Utilities\Parser\Formats\YAML',
+        'application/x-yaml' => 'Nathanmac\Utilities\Parser\Formats\YAML',
+        'yaml'               => 'Nathanmac\Utilities\Parser\Formats\YAML',
       // MSGPACK
-        'application/msgpack' => 'msgpack',
-        'application/x-msgpack' => 'msgpack',
+        'application/msgpack'   => 'Nathanmac\Utilities\Parser\Formats\MSGPack',
+        'application/x-msgpack' => 'Nathanmac\Utilities\Parser\Formats\MSGPack',
+        'msgpack'               => 'Nathanmac\Utilities\Parser\Formats\MSGPack',
       // MISC
-		'application/vnd.php.serialized' => 'serialize',
-	    'application/x-www-form-urlencoded' => 'querystr'
-    );
+        'application/vnd.php.serialized'    => 'Nathanmac\Utilities\Parser\Formats\Serialize',
+        'serialize'                         => 'Nathanmac\Utilities\Parser\Formats\Serialize',
+        'application/x-www-form-urlencoded' => 'Nathanmac\Utilities\Parser\Formats\QueryStr',
+        'querystr'                          => 'Nathanmac\Utilities\Parser\Formats\QueryStr',
+    ];
 
     /* ------------ Access Methods/Helpers ------------ */
 
@@ -66,7 +73,7 @@ class Parser
     {
         $keys = is_array($keys) ? $keys : func_get_args();
 
-        $results = array();
+        $results = [];
         foreach ($keys as $key) {
             $results = array_merge_recursive($results, $this->buildArray(explode('.', $key), $this->get($key)));
         }
@@ -105,10 +112,10 @@ class Parser
 
         $results = $this->payload();
 
-        foreach ($keys as $value)
-        {
-            if ($this->hasValueAtKey($value, $results) === false)
+        foreach ($keys as $value) {
+            if ($this->hasValueAtKey($value, $results) === false) {
                 return false;
+            }
         }
         return true;
     }
@@ -138,7 +145,7 @@ class Parser
      */
     public function mask(array $mask)
     {
-        $keys = array();
+        $keys = [];
         foreach ($mask as $key => $value) {
             $keys[] = $key . (is_array($value) ? $this->processMask($value) : '');
         }
@@ -170,7 +177,8 @@ class Parser
      */
     public function payload($format = '')
     {
-        return $this->{$this->getFormat($format)}($this->getPayload());
+        $class = $this->getFormatClass($format);
+        return $this->parse($this->getPayload(), new $class);
     }
 
     /**
@@ -188,25 +196,27 @@ class Parser
      *
      * @return string Return the short format code (xml, json, ...).
      */
-    public function getFormat($format = '')
+    public function getFormatClass($format = '')
     {
-        if (! empty($format)) {
+        if ( ! empty($format)) {
             return $this->processContentType($format);
         }
 
-        if (isset($_SERVER['CONTENT_TYPE']))
-        {
+        if (isset($_SERVER['CONTENT_TYPE'])) {
             $type = $this->processContentType($_SERVER['CONTENT_TYPE']);
-            if ($type !== false) return $type;
+            if ($type !== false) {
+                return $type;
+            }
         }
 
-        if (isset($_SERVER['HTTP_CONTENT_TYPE']))
-        {
+        if (isset($_SERVER['HTTP_CONTENT_TYPE'])) {
             $type = $this->processContentType($_SERVER['HTTP_CONTENT_TYPE']);
-            if ($type !== false) return $type;
+            if ($type !== false) {
+                return $type;
+            }
         }
 
-        return 'json';
+        return 'Nathanmac\Utilities\Parser\Formats\JSON';
     }
 
     /**
@@ -253,6 +263,32 @@ class Parser
         return $format->parse($payload);
     }
 
+    /* ------------ Format Registration Methods ------------ */
+
+    /**
+     * Register Format Class.
+     *
+     * @param $format
+     * @param $class
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return self
+     */
+    public function registerFormat($format, $class)
+    {
+        if ( ! class_exists($class)) {
+            throw new \InvalidArgumentException("Parser formatter class {$class} not found.");
+        }
+        if ( ! is_a($class, 'Nathanmac\Utilities\Parser\Formats\FormatInterface', true)) {
+            throw new \InvalidArgumentException('Parser formatters must implement the Nathanmac\Utilities\Parser\Formats\FormatInterface interface.');
+        }
+
+        $this->supported_formats[$format] = $class;
+
+        return $this;
+    }
+
     /* ------------ Helper Methods ------------ */
 
     /**
@@ -260,9 +296,9 @@ class Parser
      *
      * @param $payload
      *
-     * @return array
-     *
      * @throws Exceptions\ParserException
+     *
+     * @return array
      */
     public function xml($payload)
     {
@@ -274,9 +310,8 @@ class Parser
      *
      * @param $payload
      *
-     * @return array
-     *
      * @throws Exceptions\ParserException
+     * @return array
      */
     public function json($payload)
     {
@@ -288,9 +323,9 @@ class Parser
      *
      * @param $payload
      *
-     * @return array
-     *
      * @throws Exceptions\ParserException
+     *
+     * @return array
      */
     public function bson($payload)
     {
@@ -302,9 +337,9 @@ class Parser
      *
      * @param $payload
      *
-     * @return array
-     *
      * @throws Exceptions\ParserException
+     *
+     * @return array
      */
     public function serialize($payload)
     {
@@ -328,9 +363,9 @@ class Parser
      *
      * @param $payload
      *
-     * @return array
-     *
      * @throws Exceptions\ParserException
+     *
+     * @return array
      */
     public function yaml($payload)
     {
@@ -342,9 +377,9 @@ class Parser
      *
      * @param $payload
      *
-     * @return array
-     *
      * @throws Exceptions\ParserException
+     *
+     * @return array
      */
     public function msgpack($payload)
     {
@@ -364,29 +399,29 @@ class Parser
     {
         $keys = explode('.', $key);
 
-        while (count($keys) > 1)
-        {
+        while (count($keys) > 1) {
             $key = array_shift($keys);
 
             // Wildcard Key
-            if (preg_match($this->wildcards, $key) && is_array($data) && !empty($data)) {
+            if (preg_match($this->wildcards, $key) && is_array($data) && ! empty($data)) {
                 // Shift the first item of the array
                 if (preg_match('/^:(index|item)\[\d+\]$/', $key)) {
                     for ($x = substr($key, 7, -1); $x >= 0; $x--) {
-                        if (empty($data))
+                        if (empty($data)) {
                             return false;
+                        }
                         $item = array_shift($data);
                     }
-                } else if ($key == ':last') {
+                } elseif ($key == ':last') {
                     $item = array_pop($data);
                 } else {
                     $item = array_shift($data);
                 }
                 $data =& $item;
-
             } else {
-                if (!isset($data[$key]) || !is_array($data[$key]))
+                if ( ! isset($data[$key]) || ! is_array($data[$key])) {
                     return false;
+                }
 
                 $data =& $data[$key];
             }
@@ -397,12 +432,13 @@ class Parser
         if (preg_match($this->wildcards, $key)) {
             if (preg_match('/^:(index|item)\[\d+\]$/', $key)) {
                 for ($x = substr($key, 7, -1); $x >= 0; $x--) {
-                    if (empty($data))
+                    if (empty($data)) {
                         return false;
+                    }
                     $item = array_shift($data);
                 }
                 return $item;
-            } else if ($key == ':last') {
+            } elseif ($key == ':last') {
                 return array_pop($data);
             }
             return array_shift($data); // First Found
@@ -421,35 +457,37 @@ class Parser
     {
         $keys = explode('.', $key);
 
-        while (count($keys) > 0)
-        {
+        while (count($keys) > 0) {
             $key = array_shift($keys);
 
             // Wildcard Key
-            if (preg_match($this->wildcards, $key) && is_array($data) && !empty($data)) {
+            if (preg_match($this->wildcards, $key) && is_array($data) && ! empty($data)) {
                 // Shift the first item of the array
                 if (preg_match('/^:(index|item)\[\d+\]$/', $key)) {
                     for ($x = substr($key, 7, -1); $x >= 0; $x--) {
-                        if (empty($data))
+                        if (empty($data)) {
                             return false;
+                        }
                         $item = array_shift($data);
                     }
-                } else if ($key == ':last') {
+                } elseif ($key == ':last') {
                     $item = array_pop($data);
                 } else {
                     $item = array_shift($data);
                 }
                 $data =& $item;
-
             } else {
-                if (!isset($data[$key]))
+                if ( ! isset($data[$key])) {
                     return false;
+                }
 
-                if (is_bool($data[$key]))
+                if (is_bool($data[$key])) {
                     return true;
+                }
 
-                if ($data[$key] === '')
+                if ($data[$key] === '') {
                     return false;
+                }
 
                 $data =& $data[$key];
             }
@@ -466,10 +504,9 @@ class Parser
      */
     private function buildArray($route, $data = null)
     {
-        $key = array_pop($route);
-        $data = array($key => $data);
-        if (count($route) == 0)
-        {
+        $key  = array_pop($route);
+        $data = [$key => $data];
+        if (count($route) == 0) {
             return $data;
         }
         return $this->buildArray($route, $data);
@@ -485,12 +522,10 @@ class Parser
     {
         $keys = explode('.', $key);
 
-        while (count($keys) > 1)
-        {
+        while (count($keys) > 1) {
             $key = array_shift($keys);
 
-            if ( ! isset($array[$key]) || ! is_array($array[$key]))
-            {
+            if ( ! isset($array[$key]) || ! is_array($array[$key])) {
                 return;
             }
 

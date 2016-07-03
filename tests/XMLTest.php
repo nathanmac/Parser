@@ -2,8 +2,8 @@
 
 namespace Nathanmac\Utilities\Parser\Tests;
 
-use Nathanmac\Utilities\Parser\Parser;
 use \Mockery as m;
+use Nathanmac\Utilities\Parser\Parser;
 
 class XMLTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class XMLTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn('<xml><comments><title></title><message>hello world</message></comments><comments><title>world</title><message></message></comments></xml>');
 
-        $this->assertEquals(array("comments" => array(array("title" => null, "message" => "hello world"), array("title" => "world", "message" => null))), $parser->payload('application/xml'));
+        $this->assertEquals(["comments" => [["title" => null, "message" => "hello world"], ["title" => "world", "message" => null]]], $parser->payload('application/xml'));
     }
 
     /** @test */
@@ -40,7 +40,7 @@ class XMLTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn('<xml><comments><title>hello</title><message>hello world</message></comments><comments><title>world</title><message>hello world</message></comments></xml>');
 
-        $this->assertEquals(array("comments" => array(array("title" => "hello", "message" => "hello world"), array("title" => "world", "message" => "hello world"))), $parser->payload('application/xml'));
+        $this->assertEquals(["comments" => [["title" => "hello", "message" => "hello world"], ["title" => "world", "message" => "hello world"]]], $parser->payload('application/xml'));
     }
 
     /** @test */
@@ -50,15 +50,15 @@ class XMLTest extends \PHPUnit_Framework_TestCase
             ->shouldDeferMissing()
             ->shouldAllowMockingProtectedMethods();
 
-        $parser->shouldReceive('getFormat')
+        $parser->shouldReceive('getFormatClass')
             ->once()
-            ->andReturn('xml');
+            ->andReturn('Nathanmac\Utilities\Parser\Formats\XML');
 
         $parser->shouldReceive('getPayload')
             ->once()
             ->andReturn("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>");
 
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload());
+        $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->payload());
     }
     /** @test */
     public function parse_auto_detect_xml_data_define_content_type_as_param()
@@ -71,21 +71,21 @@ class XMLTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>");
 
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload('application/xml'));
+        $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->payload('application/xml'));
     }
 
     /** @test */
     public function parser_validates_xml_data()
     {
         $parser = new Parser();
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>"));
+        $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>"));
     }
 
     /** @test */
     public function parser_empty_xml_data()
     {
         $parser = new Parser();
-        $this->assertEquals(array(), $parser->xml(""));
+        $this->assertEquals([], $parser->xml(""));
     }
 
     /** @test */
@@ -102,19 +102,19 @@ class XMLTest extends \PHPUnit_Framework_TestCase
         $parser = new Parser();
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/xml";
-        $this->assertEquals('xml', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\XML', $parser->getFormatClass());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/xml; charset=utf8";
-        $this->assertEquals('xml', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\XML', $parser->getFormatClass());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "charset=utf8; application/xml";
-        $this->assertEquals('xml', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\XML', $parser->getFormatClass());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "APPLICATION/XML";
-        $this->assertEquals('xml', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\XML', $parser->getFormatClass());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "text/xml";
-        $this->assertEquals('xml', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\XML', $parser->getFormatClass());
 
         unset($_SERVER['HTTP_CONTENT_TYPE']);
     }

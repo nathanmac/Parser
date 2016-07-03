@@ -24,7 +24,7 @@ class QueryStr implements FormatInterface
             parse_str(trim($payload), $querystr);
             return $querystr;
         }
-        
-        return array();
+
+        return [];
     }
 }

@@ -18,9 +18,9 @@ class YAML implements FormatInterface
      *
      * @param string $payload
      *
+     * @throws ParserException
      * @return array
      *
-     * @throws ParserException
      */
     public function parse($payload)
     {
@@ -31,7 +31,7 @@ class YAML implements FormatInterface
                 throw new ParserException('Failed To Parse YAML');
             }
         }
-        
-        return array();
+
+        return [];
     }
 }

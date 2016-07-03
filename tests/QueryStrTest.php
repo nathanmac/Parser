@@ -2,8 +2,8 @@
 
 namespace Nathanmac\Utilities\Parser\Tests;
 
-use Nathanmac\Utilities\Parser\Parser;
 use \Mockery as m;
+use Nathanmac\Utilities\Parser\Parser;
 
 class QueryStrTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,37 +22,38 @@ class QueryStrTest extends \PHPUnit_Framework_TestCase
             ->shouldDeferMissing()
             ->shouldAllowMockingProtectedMethods();
 
-        $parser->shouldReceive('getFormat')
+        $parser->shouldReceive('getFormatClass')
             ->once()
-            ->andReturn('querystr');
+            ->andReturn('Nathanmac\Utilities\Parser\Formats\QueryStr');
 
         $parser->shouldReceive('getPayload')
             ->once()
             ->andReturn('status=123&message=hello world');
 
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload());
+        $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->payload());
     }
 
     /** @test */
     public function parser_validates_query_string_data()
     {
         $parser = new Parser();
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->querystr('status=123&message=hello world'));
+        $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->querystr('status=123&message=hello world'));
     }
 
     /** @test */
     public function parser_empty_query_string_data()
     {
         $parser = new Parser();
-        $this->assertEquals(array(), $parser->querystr(""));
+        $this->assertEquals([], $parser->querystr(""));
     }
 
     /** @test */
     public function format_detection_query_string()
     {
         $parser = new Parser();
+
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/x-www-form-urlencoded";
-        $this->assertEquals('querystr', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\QueryStr', $parser->getFormatClass());
 
         unset($_SERVER['HTTP_CONTENT_TYPE']);
     }

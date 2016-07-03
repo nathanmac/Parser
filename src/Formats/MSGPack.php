@@ -18,20 +18,21 @@ class MSGPack implements FormatInterface
      *
      * @param string $payload
      *
+     * @throws ParserException
      * @return array
      *
-     * @throws ParserException
      */
     public function parse($payload)
     {
         if (function_exists('msgpack_unpack')) {
             if ($payload) {
                 $msg = msgpack_unpack(trim($payload));
-                if (! $msg)
+                if ( ! $msg) {
                     throw new ParserException('Failed To Parse MSGPack');
+                }
                 return $msg;
             }
-            return array();
+            return [];
         }
 
         throw new ParserException('Failed To Parse MSGPack - Supporting Library Not Available');

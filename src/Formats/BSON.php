@@ -18,20 +18,21 @@ class BSON implements FormatInterface
      *
      * @param string $payload
      *
+     * @throws ParserException
      * @return array
      *
-     * @throws ParserException
      */
     public function parse($payload)
     {
         if (function_exists('bson_decode')) {
             if ($payload) {
                 $bson = bson_decode(trim($payload));
-                if (! $bson)
+                if ( ! $bson) {
                     throw new ParserException('Failed To Parse BSON');
+                }
                 return $bson;
             }
-            return array();
+            return [];
         }
 
         throw new ParserException('Failed To Parse BSON - Supporting Library Not Available');

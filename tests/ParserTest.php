@@ -2,8 +2,8 @@
 
 namespace Nathanmac\Utilities\Parser\Tests;
 
-use Nathanmac\Utilities\Parser\Parser;
 use \Mockery as m;
+use Nathanmac\Utilities\Parser\Parser;
 
 class ParserTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,9 +25,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $parser->shouldReceive('getPayload')
             ->andReturn('{"message": {"title": "Hello World", "body": "Some message content"}, "comments": [{ "title": "hello", "message": "hello world", "tags": ["one", "two"]}, {"title": "world", "message": "hello world", "tags": ["red", "green"]}]}');
 
-        $this->assertEquals(array("message" => array("title" => "Hello World")), $parser->mask(array('message' => array('title' => '*'))));
-        $this->assertEquals(array("comments" => array(array("title" => "hello", "message" => "hello world", "tags" => array("one", "two")), array("title" => "world", "message" => "hello world", "tags" => array("red", "green")))), $parser->mask(array('comments' => '*')));
-        $this->assertEquals(array('posts' => null), $parser->mask(array('posts' => '*')));
+        $this->assertEquals(["message" => ["title" => "Hello World"]], $parser->mask(['message' => ['title' => '*']]));
+        $this->assertEquals(["comments" => [["title" => "hello", "message" => "hello world", "tags" => ["one", "two"]], ["title" => "world", "message" => "hello world", "tags" => ["red", "green"]]]], $parser->mask(['comments' => '*']));
+        $this->assertEquals(['posts' => null], $parser->mask(['posts' => '*']));
     }
 
     /** @test */
@@ -53,7 +53,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("Hello this is a sample message", $parser->get('email.message.:first'));
         $this->assertEquals("jane.doe@example.com", $parser->get('email.*'));
         $this->assertEquals("jane.doe@example.com", $parser->get('email.:first'));
-        $this->assertEquals(array('body' => 'Hello this is a sample message'), $parser->get('email.:last'));
+        $this->assertEquals(['body' => 'Hello this is a sample message'], $parser->get('email.:last'));
         $this->assertEquals("jane.doe@example.com", $parser->get('email.:index[0]'));
         $this->assertEquals("john.doe@example.com", $parser->get('email.:index[1]'));
     }
@@ -79,12 +79,12 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('hello', $parser->get('comments.*.title'));
         $this->assertFalse($parser->has('comments.:index[99]'));
         $this->assertFalse($parser->has('comments.:index[99].title'));
-        $this->assertEquals(array('title' => 'hello', 'message' => 'hello world'), $parser->get('comments.*'));
-        $this->assertEquals(array('title' => 'hello', 'message' => 'hello world'), $parser->get('comments.%'));
-        $this->assertEquals(array('title' => 'hello', 'message' => 'hello world'), $parser->get('comments.:first'));
-        $this->assertEquals(array('title' => 'world', 'message' => 'world hello'), $parser->get('comments.:last'));
-        $this->assertEquals(array('title' => 'hello', 'message' => 'hello world'), $parser->get('comments.:index[0]'));
-        $this->assertEquals(array('title' => 'world', 'message' => 'world hello'), $parser->get('comments.:index[1]'));
+        $this->assertEquals(['title' => 'hello', 'message' => 'hello world'], $parser->get('comments.*'));
+        $this->assertEquals(['title' => 'hello', 'message' => 'hello world'], $parser->get('comments.%'));
+        $this->assertEquals(['title' => 'hello', 'message' => 'hello world'], $parser->get('comments.:first'));
+        $this->assertEquals(['title' => 'world', 'message' => 'world hello'], $parser->get('comments.:last'));
+        $this->assertEquals(['title' => 'hello', 'message' => 'hello world'], $parser->get('comments.:index[0]'));
+        $this->assertEquals(['title' => 'world', 'message' => 'world hello'], $parser->get('comments.:index[1]'));
     }
 
     /** @test */
@@ -98,7 +98,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn('{"comments": [{ "title": "hello", "message": "hello world"}, {"title": "world", "message": "hello world"}]}');
 
-        $this->assertEquals(array("comments" => array(array("title" => "hello", "message" => "hello world"), array("title" => "world", "message" => "hello world"))), $parser->payload());
+        $this->assertEquals(["comments" => [["title" => "hello", "message" => "hello world"], ["title" => "world", "message" => "hello world"]]], $parser->payload());
     }
 
     /** @test */
@@ -112,7 +112,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn('{"status":123, "message":"hello world"}');
 
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->all());
+        $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->all());
     }
 
     /** @test */
@@ -130,11 +130,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('example@example.com', $parser->get('note.headers.to'));
         $this->assertTrue($parser->has('note.headers.to'));
 
-        $this->assertEquals(array('id' => 123, 'note' => array('headers' => array('from' => 'example@example.com'), 'body' => 'Hello World')), $parser->except('note.headers.to'));
-        $this->assertEquals(array('id' => 123, 'note' => array('headers' => array('to' => 'example@example.com', 'from' => 'example@example.com'))), $parser->except('note.body'));
+        $this->assertEquals(['id' => 123, 'note' => ['headers' => ['from' => 'example@example.com'], 'body' => 'Hello World']], $parser->except('note.headers.to'));
+        $this->assertEquals(['id' => 123, 'note' => ['headers' => ['to' => 'example@example.com', 'from' => 'example@example.com']]], $parser->except('note.body'));
 
-        $this->assertEquals(array('note' => array('headers' => array('to' => 'example@example.com', 'from' => 'example@example.com'))), $parser->only('note.headers.to', 'note.headers.from'));
-        $this->assertEquals(array('id' => 123, 'status' => null, 'note' => array('body' => 'Hello World')), $parser->only('note.body', 'id', 'status'));
+        $this->assertEquals(['note' => ['headers' => ['to' => 'example@example.com', 'from' => 'example@example.com']]], $parser->only('note.headers.to', 'note.headers.from'));
+        $this->assertEquals(['id' => 123, 'status' => null, 'note' => ['body' => 'Hello World']], $parser->only('note.body', 'id', 'status'));
     }
 
     /** @test */
@@ -179,7 +179,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $parser->shouldReceive('getPayload')
             ->andReturn('{"status":123, "message":"hello world"}');
 
-        $this->assertEquals(array('status' => 123), $parser->only('status'));
+        $this->assertEquals(['status' => 123], $parser->only('status'));
     }
 
     /** @test */
@@ -193,8 +193,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             ->twice()
             ->andReturn('{"status":123, "message":"hello world"}');
 
-        $this->assertEquals(array('status' => 123), $parser->except('message'));
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->except('message.tags'));
+        $this->assertEquals(['status' => 123], $parser->except('message'));
+        $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->except('message.tags'));
     }
 
     /** @test */
@@ -203,10 +203,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $parser = new Parser();
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "somerandomstuff";
-        $this->assertEquals('json', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\JSON', $parser->getFormatClass());
 
         $_SERVER['CONTENT_TYPE'] = "somerandomstuff";
-        $this->assertEquals('json', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\JSON', $parser->getFormatClass());
     }
 
     /** @test */
@@ -216,15 +216,30 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             ->shouldDeferMissing()
             ->shouldAllowMockingProtectedMethods();
 
-        $parser->shouldReceive('getFormat')
+        $parser->shouldReceive('getFormatClass')
             ->once()
-            ->andReturn('serialize');
+            ->andReturn('Nathanmac\Utilities\Parser\Formats\Serialize');
 
         $parser->shouldReceive('getPayload')
             ->once()
             ->andReturn("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>");
 
         $this->setExpectedException('Exception', 'Failed To Parse Serialized Data');
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload());
+        $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->payload());
+    }
+
+    /** @test */
+    public function can_register_format_classes()
+    {
+        // For some reason this won't autoload...
+        require_once(__DIR__ . '/CustomFormatter.php');
+
+        $parser = new Parser();
+
+        $_SERVER['CONTENT_TYPE'] = "application/x-custom-format";
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\JSON', $parser->getFormatClass());
+
+        $parser->registerFormat('application/x-custom-format', 'Nathanmac\Utilities\Parser\Tests\CustomFormatter');
+        $this->assertEquals('Nathanmac\Utilities\Parser\Tests\CustomFormatter', $parser->getFormatClass());
     }
 }

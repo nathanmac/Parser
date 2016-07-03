@@ -10,8 +10,8 @@ class MSGPackTest extends \PHPUnit_Framework_TestCase
     public function parser_validates_msgpack_data()
     {
         if (function_exists('msgpack_unpack')) {
-            $expected = array('status' => 123, 'message' => 'hello world');
-            $payload = msgpack_pack($expected);
+            $expected = ['status' => 123, 'message' => 'hello world'];
+            $payload  = msgpack_pack($expected);
 
             $parser = new Parser();
             $this->assertEquals($expected, $parser->msgpack($payload));
@@ -23,25 +23,25 @@ class MSGPackTest extends \PHPUnit_Framework_TestCase
     {
         if (function_exists('msgpack_unpack')) {
             $parser = new Parser();
-            $this->assertEquals(array(), $parser->msgpack(""));
+            $this->assertEquals([], $parser->msgpack(""));
         }
     }
 
     /** @test */
     public function throw_an_exception_when_msgpack_library_not_loaded()
     {
-        if (! function_exists('msgpack_unpack')) {
+        if ( ! function_exists('msgpack_unpack')) {
             $this->setExpectedException('Exception', 'Failed To Parse MSGPack - Supporting Library Not Available');
 
             $parser = new Parser();
-            $this->assertEquals(array(), $parser->msgpack(""));
+            $this->assertEquals([], $parser->msgpack(""));
         }
     }
 
     /** @test */
     public function throws_an_exception_when_parsed_msgpack_bad_data()
     {
-        if (! function_exists('msgpack_unpack')) {
+        if (function_exists('msgpack_unpack')) {
             $parser = new Parser();
             $this->setExpectedException('Exception', 'Failed To Parse MSGPack');
             $parser->msgpack('as|df>ASFBw924hg2=');
@@ -52,11 +52,12 @@ class MSGPackTest extends \PHPUnit_Framework_TestCase
     public function format_detection_msgpack()
     {
         $parser = new Parser();
+        
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/msgpack";
-        $this->assertEquals('msgpack', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\MSGPack', $parser->getFormatClass());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/x-msgpack";
-        $this->assertEquals('msgpack', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\MSGPack', $parser->getFormatClass());
 
         unset($_SERVER['HTTP_CONTENT_TYPE']);
     }

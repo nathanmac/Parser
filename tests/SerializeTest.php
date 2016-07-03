@@ -2,8 +2,8 @@
 
 namespace Nathanmac\Utilities\Parser\Tests;
 
-use Nathanmac\Utilities\Parser\Parser;
 use \Mockery as m;
+use Nathanmac\Utilities\Parser\Parser;
 
 class SerializeTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,29 +22,29 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
             ->shouldDeferMissing()
             ->shouldAllowMockingProtectedMethods();
 
-        $parser->shouldReceive('getFormat')
+        $parser->shouldReceive('getFormatClass')
             ->once()
-            ->andReturn('serialize');
+            ->andReturn('Nathanmac\Utilities\Parser\Formats\Serialize');
 
         $parser->shouldReceive('getPayload')
             ->once()
             ->andReturn('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}');
 
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload());
+        $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->payload());
     }
 
     /** @test */
     public function parser_validates_serialized_data()
     {
         $parser = new Parser();
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->serialize('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}'));
+        $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->serialize('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}'));
     }
 
     /** @test */
     public function parser_empty_serialized_data()
     {
         $parser = new Parser();
-        $this->assertEquals(array(), $parser->serialize(""));
+        $this->assertEquals([], $parser->serialize(""));
     }
 
     /** @test */
@@ -59,9 +59,10 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
     public function format_detection_serialized()
     {
         $parser = new Parser();
+
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/vnd.php.serialized";
-        $this->assertEquals('serialize', $parser->getFormat());
-        
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\Serialize', $parser->getFormatClass());
+
         unset($_SERVER['HTTP_CONTENT_TYPE']);
     }
 }
