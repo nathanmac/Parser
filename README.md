@@ -307,6 +307,16 @@ $parser = new Parser();
 $parsed = $parser->parse('RAW PAYLOAD DATA', new CustomFormatter());
 ```
 
+##### Register the CustomFormatter
+
+```php
+use Acme\Formatters\CustomFormatter;
+
+$parser = new Parser();
+$parser->registerFormat('application/x-custom-format', 'Acme\Formatters\CustomFormatter');
+$parser->payload('application/x-custom-format');
+```
+
 Testing
 -------
 

@@ -2,8 +2,8 @@
 
 namespace Nathanmac\Utilities\Parser\Tests;
 
-use Nathanmac\Utilities\Parser\Parser;
 use \Mockery as m;
+use Nathanmac\Utilities\Parser\Parser;
 
 class YamlTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,9 +22,9 @@ class YamlTest extends \PHPUnit_Framework_TestCase
             ->shouldDeferMissing()
             ->shouldAllowMockingProtectedMethods();
 
-        $parser->shouldReceive('getFormat')
+        $parser->shouldReceive('getFormatClass')
             ->once()
-            ->andReturn('yaml');
+            ->andReturn('Nathanmac\Utilities\Parser\Formats\YAML');
 
         $parser->shouldReceive('getPayload')
             ->once()
@@ -32,14 +32,14 @@ class YamlTest extends \PHPUnit_Framework_TestCase
 status: 123
 message: "hello world"');
 
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->payload());
+        $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->payload());
     }
 
     /** @test */
     public function parser_validates_yaml_data()
     {
         $parser = new Parser();
-        $this->assertEquals(array('status' => 123, 'message' => 'hello world'), $parser->yaml('---
+        $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->yaml('---
 status: 123
 message: "hello world"'));
     }
@@ -48,7 +48,7 @@ message: "hello world"'));
     public function parser_empty_yaml_data()
     {
         $parser = new Parser();
-        $this->assertEquals(array(), $parser->yaml(""));
+        $this->assertEquals([], $parser->yaml(""));
     }
 
     /** @test */
@@ -66,16 +66,16 @@ message: "hello world"'));
         $parser = new Parser();
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "text/yaml";
-        $this->assertEquals('yaml', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\YAML', $parser->getFormatClass());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "text/x-yaml";
-        $this->assertEquals('yaml', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\YAML', $parser->getFormatClass());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/yaml";
-        $this->assertEquals('yaml', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\YAML', $parser->getFormatClass());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = "application/x-yaml";
-        $this->assertEquals('yaml', $parser->getFormat());
+        $this->assertEquals('Nathanmac\Utilities\Parser\Formats\YAML', $parser->getFormatClass());
 
         unset($_SERVER['HTTP_CONTENT_TYPE']);
     }

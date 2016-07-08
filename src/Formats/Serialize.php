@@ -18,9 +18,9 @@ class Serialize implements FormatInterface
      *
      * @param string $payload
      *
+     * @throws ParserException
      * @return array
      *
-     * @throws ParserException
      */
     public function parse($payload)
     {
@@ -32,6 +32,6 @@ class Serialize implements FormatInterface
             }
         }
 
-        return array();
+        return [];
     }
 }

@@ -39,6 +39,6 @@ class ParserServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array('Parser');
+        return ['Parser'];
     }
 }

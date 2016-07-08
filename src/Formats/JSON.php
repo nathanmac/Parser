@@ -18,19 +18,20 @@ class JSON implements FormatInterface
      *
      * @param string $payload
      *
+     * @throws ParserException
      * @return array
      *
-     * @throws ParserException
      */
     public function parse($payload)
     {
         if ($payload) {
             $json = json_decode(trim($payload), true);
-            if (! $json)
+            if ( ! $json) {
                 throw new ParserException('Failed To Parse JSON');
+            }
             return $json;
         }
-        
-        return array();
+
+        return [];
     }
 }

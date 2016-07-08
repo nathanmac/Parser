@@ -13,11 +13,6 @@ matrix:
     - php: 5.4
       env: 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
 
-addons:
-  apt:
-    packages:
-        - php5-msgpack
-
 before_script:
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source

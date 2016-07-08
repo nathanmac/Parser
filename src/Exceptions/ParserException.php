@@ -11,4 +11,6 @@ use Exception;
  * @author     Nathan Macnamara <nathan.macnamara@outlook.com>
  * @license    https://github.com/nathanmac/Parser/blob/master/LICENSE.md  MIT
  */
-class ParserException extends Exception {}
+class ParserException extends Exception
+{
+}

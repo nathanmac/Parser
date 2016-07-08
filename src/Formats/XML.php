@@ -18,9 +18,9 @@ class XML implements FormatInterface
      *
      * @param string $payload
      *
+     * @throws ParserException
      * @return array
      *
-     * @throws ParserException
      */
     public function parse($payload)
     {
@@ -30,14 +30,14 @@ class XML implements FormatInterface
 
                 // Fix for empty values in XML
                 $json = json_encode((array) $xml);
-                $json = str_replace(':{}',':null', $json);
-                $json = str_replace(':[]',':null', $json);
+                $json = str_replace(':{}', ':null', $json);
+                $json = str_replace(':[]', ':null', $json);
                 return json_decode($json, 1);   // Work around to accept xml input
             } catch (\Exception $ex) {
                 throw new ParserException('Failed To Parse XML');
             }
         }
-        
-        return array();
+
+        return [];
     }
 }
