@@ -11,9 +11,27 @@ matrix:
     - php: 7.0
   include:
     - php: 5.4
-      env: 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
+      env: 'BSON=0 MSGPACK=0 COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
+
+env:
+  - 'BSON=0 MSGPACK=0'
+  - 'BSON=0 MSGPACK=1'
+  - 'BSON=mongo MSGPACK=0'
+  - 'BSON=mongodb MSGPACK=0'
+  - 'BSON=mongodb MSGPACK=1'
 
 before_script:
+  - sh -c "if [ $MSGPACK -eq 1 -a $(phpenv version-name) \< 7.0 ]; then wget https://github.com/msgpack/msgpack-php/archive/php5.zip -O php-msgpack.zip && unzip php-msgpack.zip && mv msgpack-php-php5 msgpack-php; fi"
+  - sh -c "if [ $MSGPACK -eq 1 -a $(phpenv version-name) \> 6.0 ]; then wget https://github.com/msgpack/msgpack-php/archive/master.zip -O php-msgpack.zip && unzip php-msgpack.zip && mv msgpack-php-master msgpack-php; fi"
+  - sh -c "if [ $MSGPACK -eq 1 ]; then cd msgpack-php/ && phpize && ./configure && make && make install; fi"
+  - sh -c "if [ $MSGPACK -eq 1 ]; then echo \"extension=msgpack.so\" >> `php --ini | grep \"Loaded Configuration\" | sed -e \"s|.*:\s*||\"`; fi"
+  - sh -c "if [ $MSGPACK -eq 0 ]; then echo \"Not Installing MSGPack Extension\"; fi"
+  - sh -c "if [ $BSON = mongo -a $(phpenv version-name) \< 7.0 ]; then wget https://github.com/mongodb/mongo-php-driver-legacy/archive/master.zip -O php-mongo.zip && unzip php-mongo.zip; fi"
+  - sh -c "if [ $BSON = mongo -a $(phpenv version-name) \< 7.0 ]; then cd mongo-php-driver-legacy-master/ && phpize && ./configure && make && make install; fi"
+  - sh -c "if [ $BSON = mongo -a $(phpenv version-name) \< 7.0 ]; then echo \"extension=mongo.so\" >> `php --ini | grep \"Loaded Configuration\" | sed -e \"s|.*:\s*||\"`; fi"
+  - sh -c "if [ $BSON = mongodb ]; then git clone --depth=50 --recursive https://github.com/mongodb/mongo-php-driver/; fi"
+  - sh -c "if [ $BSON = mongodb ]; then cd mongo-php-driver/ && git submodule status --recursive && ./.travis.scripts/compile.sh; fi"
+  - sh -c "if [ $BSON = 0 ]; then echo \"Not Installing Mongo or MongoDB Extension\"; fi"
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
