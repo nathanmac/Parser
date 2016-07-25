@@ -15,6 +15,9 @@ interface FormatInterface
      * Parse Payload Data
      *
      * @param string $payload
+     *
+     * @throws ParserException
+     *
      * @return array
      */
     public function parse($payload);

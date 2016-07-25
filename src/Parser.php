@@ -194,7 +194,7 @@ class Parser
     /**
      * Autodetect the payload data type using content-type value.
      *
-     * @return string Return the short format code (xml, json, ...).
+     * @return string Return the name of the formatter class.
      */
     public function getFormatClass($format = '')
     {

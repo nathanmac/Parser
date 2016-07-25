@@ -3,6 +3,7 @@
 namespace Nathanmac\Utilities\Parser\Formats;
 
 use Nathanmac\Utilities\Parser\Exceptions\ParserException;
+use Symfony\Component\Yaml\Yaml as SFYaml;
 
 /**
  * YAML Formatter
@@ -26,7 +27,8 @@ class YAML implements FormatInterface
     {
         if ($payload) {
             try {
-                return \Symfony\Component\Yaml\Yaml::parse(trim(preg_replace('/\t+/', '', $payload)));
+                $flags = (defined('Symfony\Component\Yaml\Yaml::PARSE_DATETIME')) ? (SFYaml::PARSE_EXCEPTION_ON_INVALID_TYPE | SFYaml::PARSE_DATETIME) : true;
+                return SFYaml::parse(trim(preg_replace('/\t+/', '', $payload)), $flags);
             } catch (\Exception $ex) {
                 throw new ParserException('Failed To Parse YAML');
             }
