@@ -218,8 +218,9 @@ $parsed = $parser->json('
 $parser = new Parser();
 $parsed = $parser->xml('
 			<?xml version="1.0" encoding="UTF-8"?>
-			<xml>
-				<message>
+			<xml xmlns:ns="http://example.com/xmlns">
+				<message status="sent">
+					<ns:meta hint="created">Created 5 minutes ago</ns:meta>
 					<to>Jack Smith</to>
 					<from>Jane Doe</from>
 					<subject>Hello World</subject>
