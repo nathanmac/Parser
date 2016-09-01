@@ -60,6 +60,7 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->payload());
     }
+
     /** @test */
     public function parse_auto_detect_xml_data_define_content_type_as_param()
     {
@@ -79,6 +80,27 @@ class XMLTest extends \PHPUnit_Framework_TestCase
     {
         $parser = new Parser();
         $this->assertEquals(['status' => 123, 'message' => 'hello world'], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml><status>123</status><message>hello world</message></xml>"));
+    }
+
+    /** @test */
+    public function parser_validates_xml_data_with_attribute()
+    {
+        $parser = new Parser();
+        $this->assertEquals(['status' => 123, 'message' => 'hello world', '@name' => 'root'], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml name=\"root\"><status>123</status><message>hello world</message></xml>"));
+    }
+
+    /** @test */
+    public function parser_validates_xml_data_with_namespace()
+    {
+        $parser = new Parser();
+        $this->assertEquals(['status' => 123, 'ns:message' => 'hello world'], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml xmlns:ns=\"data:namespace\"><status>123</status><ns:message>hello world</ns:message></xml>"));
+    }
+
+    /** @test */
+    public function parser_validates_xml_data_with_attribute_and_namespace()
+    {
+        $parser = new Parser();
+        $this->assertEquals(['status' => 123, 'ns:message' => 'hello world', '@name' => 'root'], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml name=\"root\" xmlns:ns=\"data:namespace\"><status>123</status><ns:message>hello world</ns:message></xml>"));
     }
 
     /** @test */

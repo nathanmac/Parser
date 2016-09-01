@@ -27,17 +27,49 @@ class XML implements FormatInterface
         if ($payload) {
             try {
                 $xml = simplexml_load_string($payload, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-                // Fix for empty values in XML
-                $json = json_encode((array) $xml);
-                $json = str_replace(':{}', ':null', $json);
-                $json = str_replace(':[]', ':null', $json);
-                return json_decode($json, 1);   // Work around to accept xml input
+                $ns = ['' => null] + $xml->getDocNamespaces(true);
+                return $this->recursive_parse($xml, $ns);
             } catch (\Exception $ex) {
                 throw new ParserException('Failed To Parse XML');
             }
         }
 
         return [];
+    }
+
+    protected function recursive_parse($xml, $ns)
+    {
+        $result = (string) $xml;
+
+        foreach ($ns as $nsName => $nsUri) {
+            foreach ($xml->attributes($nsUri) as $attName => $attValue) {
+                if ( ! empty($nsName)) {
+                    $attName = "{$nsName}:{$attName}";
+                }
+
+                $result["@{$attName}"] = $attValue;
+            }
+
+            foreach ($xml->children($nsUri) as $childName => $child) {
+                if ( ! empty($nsName)) {
+                    $childName = "{$nsName}:{$childName}";
+                }
+
+                $child = $this->recursive_parse($child, $ns);
+
+                if (isset($result[$childName])) {
+                    if (is_numeric(key($result[$childName]))) {
+                        $result[$childName][] = $child;
+                    } else {
+                        $temp = $result[$childName];
+                        $result[$childName] = [$temp, $child];
+                    }
+                } else {
+                    $result[$childName] = $child;
+                }
+            }
+        }
+
+        return $result;
     }
 }
