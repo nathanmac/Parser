@@ -17,7 +17,7 @@ Installation
 Begin by installing this package through Composer. Edit your project's `composer.json` file to require `Nathanmac/Parser`.
 
 	"require": {
-		"Nathanmac/Parser": "3.*"
+		"Nathanmac/Parser": "4.*"
 	}
 
 Next, update Composer from the Terminal:
