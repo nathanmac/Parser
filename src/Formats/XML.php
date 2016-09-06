@@ -43,7 +43,11 @@ class XML implements FormatInterface
 
         if ($xml->count() == 0 and $xml_string != '') {
             if (count($xml->attributes()) == 0) {
-                $result = $xml_string;
+                if (trim($xml_string) == '') {
+                    $result = null;
+                } else {
+                    $result = $xml_string;
+                }
             } else {
                 $result = array('#text' => $xml_string);
             }

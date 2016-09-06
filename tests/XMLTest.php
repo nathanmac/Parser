@@ -197,4 +197,11 @@ class XMLTest extends \PHPUnit_Framework_TestCase
         $parser = new Parser();
         $this->assertEquals(['@name' => 'root', 'd' => [null, null, '2', null]], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml name=\"root\"><d></d><d></d><d>2</d><d></d></xml>"));
     }
+
+    /** @test */
+    public function parser_validates_xml_empty_values_with_spaces()
+    {
+        $parser = new Parser();
+        $this->assertEquals(['@name' => 'root', 'test' => [null, '  x  ', null]], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml name=\"root\"><test>  \n\n\n  \n</test><test>  x  </test><test>    </test></xml>"));
+    }
 }
