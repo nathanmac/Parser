@@ -45,7 +45,7 @@ class XML implements FormatInterface
             if (count($xml->attributes()) == 0) {
                 $result = $xml_string;
             } else {
-                $result = array($xml_string);
+                $result = array('#text' => $xml_string);
             }
         } else {
             $result = null;
@@ -57,7 +57,7 @@ class XML implements FormatInterface
                     $attName = "{$nsName}:{$attName}";
                 }
 
-                $result = ["@{$attName}" => (string)$attValue] + (array)$result;
+                $result["@{$attName}"] = (string)$attValue;
             }
 
             foreach ($xml->children($nsUri) as $childName => $child) {

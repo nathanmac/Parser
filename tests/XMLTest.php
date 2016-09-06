@@ -152,7 +152,7 @@ class XMLTest extends \PHPUnit_Framework_TestCase
     public function parser_validates_xml_with_attributes()
     {
         $parser = new Parser();
-        $this->assertEquals(['@name' => 'root', '@status' => 'active', 0 => 'some value'], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml name=\"root\" status=\"active\">some value</xml>"));
+        $this->assertEquals(['@name' => 'root', '@status' => 'active', '#text' => 'some value'], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml name=\"root\" status=\"active\">some value</xml>"));
     }
 
     /** @test */
@@ -176,9 +176,9 @@ class XMLTest extends \PHPUnit_Framework_TestCase
         $parser = new Parser();
         $this->assertEquals(
             ['Book' => [
-                ['@id' => '2', 'Author' => ['@id' => 18, 0 => 'Author #1'], 'Title' => 'Book #1'],
-                ['@id' => '3', 'Author' => ['@id' => 180, 0 => 'Author #2'], 'Title' => 'Book #2'],
-                ['@id' => '4', 'Author' => ['@id' => 18, 0 => 'Author #1'], 'Title' => 'Book #3'],
+                ['@id' => '2', 'Author' => ['@id' => 18,    '#text' => 'Author #1'], 'Title' => 'Book #1'],
+                ['@id' => '3', 'Author' => ['@id' => 180,   '#text' => 'Author #2'], 'Title' => 'Book #2'],
+                ['@id' => '4', 'Author' => ['@id' => 18,    '#text' => 'Author #1'], 'Title' => 'Book #3'],
             ],],
             $parser->xml($xml)
         );
