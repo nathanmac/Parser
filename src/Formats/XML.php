@@ -39,29 +39,29 @@ class XML implements FormatInterface
 
     protected function recursive_parse($xml, $ns)
     {
-        $xml_string = (string) $xml;
+        $xml_string = (string)$xml;
 
-        if($xml->count() == 0 and $xml_string != '') {
-            if(count($xml->attributes()) == 0){
+        if ($xml->count() == 0 and $xml_string != '') {
+            if (count($xml->attributes()) == 0) {
                 $result = $xml_string;
-            }else{
+            } else {
                 $result = array($xml_string);
             }
-        }else{
+        } else {
             $result = null;
         }
 
         foreach ($ns as $nsName => $nsUri) {
             foreach ($xml->attributes($nsUri) as $attName => $attValue) {
-                if ( ! empty($nsName)) {
+                if (!empty($nsName)) {
                     $attName = "{$nsName}:{$attName}";
                 }
 
-                $result = ["@{$attName}" => (string) $attValue] + (array) $result;
+                $result = ["@{$attName}" => (string)$attValue] + (array)$result;
             }
 
             foreach ($xml->children($nsUri) as $childName => $child) {
-                if ( ! empty($nsName)) {
+                if (!empty($nsName)) {
                     $childName = "{$nsName}:{$childName}";
                 }
 

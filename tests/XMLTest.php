@@ -175,10 +175,10 @@ class XMLTest extends \PHPUnit_Framework_TestCase
             </Books>';
         $parser = new Parser();
         $this->assertEquals(
-            ['Book'=>[
-                ['@id'=>'2', 'Author'=>['@id'=>18,  0=>'Author #1'], 'Title'=>'Book #1'],
-                ['@id'=>'3', 'Author'=>['@id'=>180, 0=>'Author #2'], 'Title'=>'Book #2'],
-                ['@id'=>'4', 'Author'=>['@id'=>18,  0=>'Author #1'], 'Title'=>'Book #3'],
+            ['Book' => [
+                ['@id' => '2', 'Author' => ['@id' => 18, 0 => 'Author #1'], 'Title' => 'Book #1'],
+                ['@id' => '3', 'Author' => ['@id' => 180, 0 => 'Author #2'], 'Title' => 'Book #2'],
+                ['@id' => '4', 'Author' => ['@id' => 18, 0 => 'Author #1'], 'Title' => 'Book #3'],
             ],],
             $parser->xml($xml)
         );
