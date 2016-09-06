@@ -140,4 +140,61 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
         unset($_SERVER['HTTP_CONTENT_TYPE']);
     }
+
+    /** @test */
+    public function parser_validates_xml_with_spaces_and_new_lines()
+    {
+        $parser = new Parser();
+        $this->assertEquals(['status' => 123, 'message' => 'hello world', '@name' => 'root'], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?> <xml name=\"root\"> \n <status>123</status> <message>hello world</message></xml>"));
+    }
+
+    /** @test */
+    public function parser_validates_xml_with_attributes()
+    {
+        $parser = new Parser();
+        $this->assertEquals(['@name' => 'root', '@status' => 'active', 0 => 'some value'], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml name=\"root\" status=\"active\">some value</xml>"));
+    }
+
+    /** @test */
+    public function parser_validates_complex_xml_tree()
+    {
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>
+            <Books>
+                <Book id="2">
+                    <Author id="18">Author #1</Author>
+                    <Title>Book #1</Title>
+                </Book>
+                <Book id="3">
+                    <Author id="180">Author #2</Author>
+                    <Title>Book #2</Title>
+                </Book>
+                <Book id="4">
+                    <Author id="18">Author #1</Author>
+                    <Title>Book #3</Title>
+                </Book>
+            </Books>';
+        $parser = new Parser();
+        $this->assertEquals(
+            ['Book'=>[
+                ['@id'=>'2', 'Author'=>['@id'=>18,  0=>'Author #1'], 'Title'=>'Book #1'],
+                ['@id'=>'3', 'Author'=>['@id'=>180, 0=>'Author #2'], 'Title'=>'Book #2'],
+                ['@id'=>'4', 'Author'=>['@id'=>18,  0=>'Author #1'], 'Title'=>'Book #3'],
+            ],],
+            $parser->xml($xml)
+        );
+    }
+
+    /** @test */
+    public function parser_validates_xml_data_with_empty_values()
+    {
+        $parser = new Parser();
+        $this->assertEquals(['@name' => 'root', 'd' => [null, '1', '2']], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml name=\"root\"><d></d><d>1</d><d>2</d></xml>"));
+    }
+
+    /** @test */
+    public function parser_validates_xml_data_with_many_empty_values()
+    {
+        $parser = new Parser();
+        $this->assertEquals(['@name' => 'root', 'd' => [null, null, '2', null]], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml name=\"root\"><d></d><d></d><d>2</d><d></d></xml>"));
+    }
 }
