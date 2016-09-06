@@ -140,4 +140,11 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
         unset($_SERVER['HTTP_CONTENT_TYPE']);
     }
+
+    /** @test */
+    public function parser_validates_xml_with_spaces_and_new_lines()
+    {
+        $parser = new Parser();
+        $this->assertEquals(['status' => 123, 'message' => 'hello world', '@name' => 'root'], $parser->xml("<?xml version=\"1.0\" encoding=\"UTF-8\"?> <xml name=\"root\"> \n <status>123</status> <message>hello world</message></xml>"));
+    }
 }

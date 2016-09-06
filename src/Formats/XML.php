@@ -39,7 +39,13 @@ class XML implements FormatInterface
 
     protected function recursive_parse($xml, $ns)
     {
-        $result = (string) $xml;
+        $xml_array = (array) $xml;
+        if(count($xml_array) == 1 and is_numeric(key($xml_array))) {
+            $result = (string) $xml;
+        }else{
+            $result = null;
+        }
+        unset($xml_array);
 
         foreach ($ns as $nsName => $nsUri) {
             foreach ($xml->attributes($nsUri) as $attName => $attValue) {
@@ -47,7 +53,7 @@ class XML implements FormatInterface
                     $attName = "{$nsName}:{$attName}";
                 }
 
-                $result["@{$attName}"] = $attValue;
+                $result["@{$attName}"] = (string) $attValue;
             }
 
             foreach ($xml->children($nsUri) as $childName => $child) {
