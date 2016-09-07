@@ -39,26 +39,40 @@ class XML implements FormatInterface
 
     protected function recursive_parse($xml, $ns)
     {
-        $result = (string) $xml;
+        $xml_string = (string)$xml;
+
+        if ($xml->count() == 0 and $xml_string != '') {
+            if (count($xml->attributes()) == 0) {
+                if (trim($xml_string) == '') {
+                    $result = null;
+                } else {
+                    $result = $xml_string;
+                }
+            } else {
+                $result = array('#text' => $xml_string);
+            }
+        } else {
+            $result = null;
+        }
 
         foreach ($ns as $nsName => $nsUri) {
             foreach ($xml->attributes($nsUri) as $attName => $attValue) {
-                if ( ! empty($nsName)) {
+                if (!empty($nsName)) {
                     $attName = "{$nsName}:{$attName}";
                 }
 
-                $result["@{$attName}"] = $attValue;
+                $result["@{$attName}"] = (string)$attValue;
             }
 
             foreach ($xml->children($nsUri) as $childName => $child) {
-                if ( ! empty($nsName)) {
+                if (!empty($nsName)) {
                     $childName = "{$nsName}:{$childName}";
                 }
 
                 $child = $this->recursive_parse($child, $ns);
 
-                if (isset($result[$childName])) {
-                    if (is_numeric(key($result[$childName]))) {
+                if (is_array($result) and array_key_exists($childName, $result)) {
+                    if (is_array($result[$childName]) and is_numeric(key($result[$childName]))) {
                         $result[$childName][] = $child;
                     } else {
                         $temp = $result[$childName];
