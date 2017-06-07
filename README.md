@@ -50,7 +50,7 @@ And, for convenience, add a facade alias to this same file at the bottom:
 ```php
 'aliases' => [
     '...',
-    'Parser' => 'Nathanmac\Utilities\Parser\Facades\Parser',
+    'Parser' => 'Nathanmac\Utilities\Parser\Facades\Parser::class',
 ];
 ```
 
@@ -61,7 +61,7 @@ If you are a Lumen user, then there is a service provider that you can make use 
 ```php
 // bootstrap/app.php
 
-$app->register('Nathanmac\Utilities\Parser\ParserServiceProvider');
+$app->register('Nathanmac\Utilities\Parser\ParserServiceProvider::class');
 ```
 
 Lumen users can also add the facade alias.
