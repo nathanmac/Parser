@@ -11,19 +11,14 @@ Parser
 
 Simple PHP Parser Library for API Development, parse a post http payload into a php array.
 
+Also see the [Responder](https://github.com/nathanmac/Responder) library for handling output.
+
 Installation
 ------------
 
-Begin by installing this package through Composer. Edit your project's `composer.json` file to require `Nathanmac/Parser`.
+Begin by installing this package through Composer. From the Terminal:
 
-	"require": {
-		"Nathanmac/Parser": "4.*"
-	}
-
-Next, update Composer from the Terminal:
-
-    composer update
-
+    composer require nathanmac/Parser
 
 ### Laravel/Lumen Users
 
@@ -88,17 +83,32 @@ public function index()
 	Parser::msgpack($payload);	    // MSGPack > Array
 
     Parser::all();                         // Return all values
-    Parser::get('key', 'default value');   // Get value by key, set an optional default.
     Parser::has('key');                    // Does a key exist, with value.
+    Parser::get('key', 'default value');   // Get value by key, set an optional default.
     Parser::only('id', 'name', 'email');   // Only return value from the selected keys.
     Parser::except('password');            // Don't return values from the selected keys.
+    Parser::mask($mask);                   // Return masked values (see Mask Function, below).
 }
+```
+
+All the examples below assume you *aren't* using Laravel (or Lumen), and therefore don't have access to the facade.  As with any other facade, instead of:
+
+```php
+$parser = new Parser();
+
+$parser->{$method}($payload);
+```
+
+just use:
+
+```php
+Parser::{$method}($payload);
 ```
 
 Usage
 -----
 
-#### Parsing Functions
+### Parsing Functions
 ```php
 $parser->json($payload);		// JSON > Array
 $parser->xml($payload);		    // XML > Array
@@ -120,10 +130,11 @@ $parser->payload('application/json');	// Specifiy the content type
 ```php
 $parser = new Parser();
 $parser->all();                         // Return all values
-$parser->get('key', 'default value');   // Get value by key, set an optional default.
 $parser->has('key');                    // Does a key exist, with value.
+$parser->get('key', 'default value');   // Get value by key, set an optional default.
 $parser->only('id', 'name', 'email');   // Only return value from the selected keys.
 $parser->except('password');            // Don't return values from the selected keys.
+$parser->mask($mask);                   // Return masked values (see Mask Function, below).
 ```
 
 #### Mask function
@@ -187,16 +198,16 @@ $output = [
 #### Wildcards/Special Keys (*, %, :first, :last, :index[0], :item[0])
 ```php
 $parser = new Parser();
-$parser->get('message.*');          // Get value by key. (Wildcard key returns first item found)
 $parser->has('message.*');          // Does a key exist, with value. (Wildcard key returns first item found)
-$parser->get('message.:first');     // Get value by key. (:first key returns first item found)
+$parser->get('message.*');          // Get value by key. (Wildcard key returns first item found)
 $parser->has('message.:first');     // Does a key exist, with value. (:first key returns first item found)
-$parser->get('message.:last');      // Get value by key. (:last key returns first item found)
-$parser->has('message.:last');      // Does a key exist, with value. (:last key returns first item found)
-$parser->get('message.:index[0]');  // Get value by key. (:index[0] key returns item at index 0)
+$parser->get('message.:first');     // Get value by key. (:first key returns first item found)
+$parser->has('message.:last');      // Does a key exist, with value. (:last key returns last item found)
+$parser->get('message.:last');      // Get value by key. (:last key returns last item found)
 $parser->has('message.:index[0]');  // Does a key exist, with value. (:index[0] key returns item at index 0)
-$parser->get('message.:item[0]');   // Get value by key. (:item[0] key returns item at index 0)
+$parser->get('message.:index[0]');  // Get value by key. (:index[0] key returns item at index 0)
 $parser->has('message.:item[0]');   // Does a key exist, with value. (:item[0] key returns item at index 0)
+$parser->get('message.:item[0]');   // Get value by key. (:item[0] key returns item at index 0)
 ```
 
 #### Parse JSON
@@ -299,7 +310,7 @@ class CustomFormatter implements FormatInterface {
 }
 ```
 
-##### Using the CustomFormatter
+### Using the CustomFormatter
 
 ```php
 use Acme\Formatters\CustomFormatter;
@@ -308,7 +319,7 @@ $parser = new Parser();
 $parsed = $parser->parse('RAW PAYLOAD DATA', new CustomFormatter());
 ```
 
-##### Register the CustomFormatter
+### Autodetecting the CustomFormatter
 
 ```php
 use Acme\Formatters\CustomFormatter;
