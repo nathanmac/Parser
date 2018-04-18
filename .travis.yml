@@ -17,8 +17,6 @@ env:
   - 'BSON=0 MSGPACK=0'
   - 'BSON=0 MSGPACK=1'
   - 'BSON=mongo MSGPACK=0'
-  - 'BSON=mongodb MSGPACK=0'
-  - 'BSON=mongodb MSGPACK=1'
 
 before_script:
   - sh -c "if [ $MSGPACK -eq 1 -a $(phpenv version-name) \< 7.0 ]; then wget https://github.com/msgpack/msgpack-php/archive/php5.zip -O php-msgpack.zip && unzip php-msgpack.zip && mv msgpack-php-php5 msgpack-php; fi"
