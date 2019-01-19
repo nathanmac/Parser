@@ -35,8 +35,8 @@ Include the service provider within `app/config/app.php`.
 
 ```php
 'providers' => [
-    '...',
-    'Nathanmac\Utilities\Parser\ParserServiceProvider'
+    ...,
+    Nathanmac\Utilities\Parser\ParserServiceProvider::class
 ];
 ```
 
@@ -44,8 +44,8 @@ And, for convenience, add a facade alias to this same file at the bottom:
 
 ```php
 'aliases' => [
-    '...',
-    'Parser' => 'Nathanmac\Utilities\Parser\Facades\Parser',
+    ...,
+    'Parser' => Nathanmac\Utilities\Parser\Facades\Parser::class,
 ];
 ```
 
