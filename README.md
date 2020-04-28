@@ -4,10 +4,7 @@ Parser
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/nathanmac/Parser.svg?style=flat-square)](https://packagist.org/packages/nathanmac/parser)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/nathanmac/Parser/master.svg?style=flat-square)](https://travis-ci.org/nathanmac/Parser)
-[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/nathanmac/Parser.svg?style=flat-square)](https://scrutinizer-ci.com/g/nathanmac/Parser/code-structure)
-[![Quality Score](https://img.shields.io/scrutinizer/g/nathanmac/Parser.svg?style=flat-square)](https://scrutinizer-ci.com/g/nathanmac/Parser)
 [![Total Downloads](https://img.shields.io/packagist/dt/nathanmac/Parser.svg?style=flat-square)](https://packagist.org/packages/nathanmac/Parser)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/c5bc4a3d-b954-4901-905f-cd49fb8c3986/mini.png)](https://insight.sensiolabs.com/projects/c5bc4a3d-b954-4901-905f-cd49fb8c3986)
 
 Simple PHP Parser Library for API Development, parse a post http payload into a php array.
 

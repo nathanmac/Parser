@@ -41,6 +41,14 @@
     "extra": {
         "branch-alias": {
             "dev-master": "3.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Nathanmac\\Utilities\\Parser\\ParserServiceProvider"
+            ],
+            "aliases": {
+                "Parser": "Nathanmac\\Utilities\\Parser\\Facades\\Parser"
+            }
         }
     }
 }
