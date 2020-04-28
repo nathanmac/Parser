@@ -17,11 +17,11 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "symfony/yaml": "~2.0|~3.0"
+        "symfony/yaml": "~2.0|~3.0|~4.0|~5.0"
     },
     "require-dev": {
-        "illuminate/support": "~5.0",
-        "phpunit/phpunit": "4.*",
+        "illuminate/support": "~5.0|~6.0|~7.0",
+        "phpunit/phpunit": "4.*|5.*",
         "mockery/mockery": "0.9.3",
         "scrutinizer/ocular": "^1.1"
     },
