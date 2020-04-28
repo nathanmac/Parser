@@ -1,17 +1,14 @@
 language: php
 
+dist: trusty
+
 php:
-  - 5.4
-  - 5.5
   - 5.6
   - 7.0
-
-matrix:
-  allow_failures:
-    - php: 7.0
-  include:
-    - php: 5.4
-      env: 'BSON=0 MSGPACK=0 COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
+  - 7.1
+  - 7.2
+  - 7.3
+  - 7.4
 
 env:
   - 'BSON=0 MSGPACK=0'
@@ -30,13 +27,10 @@ before_script:
   - sh -c "if [ $BSON = mongo -a $(phpenv version-name) \< 7.0 ]; then cd mongo-php-driver-legacy-master/ && phpize && ./configure && make && make install; fi"
   - sh -c "if [ $BSON = mongo -a $(phpenv version-name) \< 7.0 ]; then echo \"extension=mongo.so\" >> `php --ini | grep \"Loaded Configuration\" | sed -e \"s|.*:\s*||\"`; fi"
   - sh -c "if [ $BSON = mongodb ]; then git clone --depth=50 --recursive https://github.com/mongodb/mongo-php-driver/; fi"
-  - sh -c "if [ $BSON = mongodb ]; then cd mongo-php-driver/ && git submodule status --recursive && ./.travis.scripts/compile.sh; fi"
+  - sh -c "if [ $BSON = mongodb ]; then cd mongo-php-driver/ && git submodule status --recursive && ./.travis.scripts/before_script.sh; fi"
   - sh -c "if [ $BSON = 0 ]; then echo \"Not Installing Mongo or MongoDB Extension\"; fi"
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
 script:
-  - phpunit --coverage-text --coverage-clover=coverage.clover
-
-after_script:
-  - php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover
+  - vendor/bin/phpunit
